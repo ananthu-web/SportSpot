@@ -1,0 +1,107 @@
+/* Navbar */
+.custom-navbar {
+  background: transparent !important; /* fully transparent */
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  padding: 15px 0;
+  box-shadow: none;
+  z-index: 999; /* always above content */
+}
+
+/* Add slight background when scrolled */
+.custom-navbar.scrolled {
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Nav links with 3D hover */
+.nav-links .nav-item {
+  color: #fff;
+  margin: 0 15px;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+  perspective: 500px;
+}
+
+.nav-links .nav-item::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #ffd700;
+  transition: width 0.3s ease;
+}
+
+.nav-links .nav-item:hover {
+  color: #ffd700;
+  transform: rotateY(15deg) scale(1.05);
+}
+
+.nav-links .nav-item:hover::after {
+  width: 100%;
+}
+
+/* Custom Buttons */
+.custom-btn {
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.45rem 1.3rem;
+  border-radius: 50px;           /* pill shape */
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+/* Login button */
+.btn-login {
+  color: #ffc107;
+  border: 2px solid #ffc107;
+  background-color: transparent;
+}
+
+.btn-login:hover {
+  background-color: #ffc107;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+/* Signup button */
+.btn-signup {
+  color: #ffd740;
+  border: 2px solid #ffd740;
+  background-color: transparent;
+}
+
+.btn-signup:hover {
+  background-color: #ffd740;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+/* Logo */
+.navbar-logo {
+  font-family: 'Poppins', sans-serif; /* original design font */
+  font-size: 1.7rem !important;         /* make it bigger */
+  letter-spacing: 2px !important;     /* increase spacing */
+  font-weight: 700;                    /* bold */
+  color: #fff;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navbar-logo .text-warning {
+  color: #ffd700; /* golden accent */
+}
+
+.navbar-logo:hover {
+  transform: rotateY(10deg) scale(1.05); /* subtle 3D hover effect */
+  text-shadow: 0 0 8px #ffd700;         /* subtle glow */
+}

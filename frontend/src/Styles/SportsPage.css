@@ -1,0 +1,84 @@
+/* SportsPage.css */
+.sports-page {
+  background: radial-gradient(circle at top, #0a0a0a, #111); /* dark gradient */
+  color: #fff;
+  min-height: 100vh;
+  padding: 100px 20px 60px; /* top padding to avoid navbar overlap */
+  font-family: 'Poppins', sans-serif;
+}
+
+.sports-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.sports-header h1 {
+  font-size: 3rem;
+  color: #ffd700;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.sports-header p {
+  color: #ccc;
+  font-size: 1.2rem;
+}
+
+.sports-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.sport-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 280px;
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.sport-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 20px #ffd700;
+}
+
+.sport-image img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.sport-info {
+  padding: 20px;
+}
+
+.sport-info h2 {
+  font-size: 1.5rem;
+  color: #ffd700;
+  margin-bottom: 10px;
+}
+
+.sport-info p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 15px;
+}
+
+.book-btn {
+  background: linear-gradient(45deg, #ffd700, #ffab00);
+  border: none;
+  color: #111;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.book-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #ffd700;
+}
