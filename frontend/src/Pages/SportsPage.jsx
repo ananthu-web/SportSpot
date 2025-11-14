@@ -1,6 +1,7 @@
 import React from "react";
 import "../Styles/SportsPage.css";
 import SportsData from "../Data/SportsData";
+import { Link } from "react-router-dom";
 
 
 function SportsPage() {
@@ -20,7 +21,11 @@ function SportsPage() {
             <div className="sport-info">
               <h2>{sport.name}</h2>
               <p>{sport.description}</p>
-              <button className="book-btn">Book Now</button>
+
+               <Link to={`/booking/${sport.id}`} className="book-link">
+                <button className="book-btn">Book Now</button>
+              </Link>
+
             </div>
           </div>
         ))}

@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Styles/Auth.css"; // We'll create shared CSS for login/signup
+import API from "../API";
 
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add login logic here
-    alert(`Logged in with: ${email}`);
-    navigate("/"); // Redirect to home after login
-  };
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await API.post("/api/auth/login", { email, password });
+    localStorage.setItem("token", response.data.token);
+    navigate("/"); // Redirect after successful login
+  } catch (err) {
+    console.error("Login error:", err.response.data.message);
+  }
+};
 
   return (
     <div className="auth-page">
@@ -23,7 +28,7 @@ function LoginPage() {
         </h2>
         <p className="auth-subtitle">Login to book your favorite sports courts</p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email"

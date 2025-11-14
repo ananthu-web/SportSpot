@@ -3,12 +3,11 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import "../Styles/Navbar.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
-
 function NavigationBar() {
-
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -31,10 +30,12 @@ function NavigationBar() {
           element.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
-  }
+  };
 
   return (
     <Navbar
+      expanded={expanded}
+      onToggle={() => setExpanded(!expanded)}
       expand="lg"
       fixed="top" // fixed at top
       className={`custom-navbar ${scrolled ? "scrolled" : ""}`}
@@ -47,15 +48,21 @@ function NavigationBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto nav-links">
-            <Nav.Link as={Link} to={"/"}
+            <Nav.Link
+              as={Link}
+              to={"/"}
               className="nav-item"
-              onClick={() => scrollToSection("home")}
+              onClick={() =>{ scrollToSection("home");setExpanded(false);}}
             >
               Home
             </Nav.Link>
-            <Nav.Link 
+            
+            <Nav.Link
               className="nav-item"
-              onClick={() => scrollToSection("about")}
+              onClick={() => {
+                scrollToSection("about"); // your existing scroll function
+                setExpanded(false); // closes the hamburger menu
+              }}
             >
               About
             </Nav.Link>
@@ -65,16 +72,16 @@ function NavigationBar() {
             </Nav.Link>
             <Nav.Link
               className="nav-item"
-              onClick={() => scrollToSection("contact")}
+              onClick={() => {scrollToSection("contact");setExpanded(false);}}
             >
               Contact
             </Nav.Link>
           </Nav>
           <div className="d-flex align-items-center">
-            <Link to="/login" className="custom-btn btn-login me-3">
+            <Link to="/login" onClick={() => setExpanded(false)} className="custom-btn btn-login me-3">
               Login
             </Link>
-            <Link to="/signup" className="custom-btn btn-signup">
+            <Link to="/signup" onClick={() => setExpanded(false)} className="custom-btn btn-signup">
               Signup
             </Link>
           </div>

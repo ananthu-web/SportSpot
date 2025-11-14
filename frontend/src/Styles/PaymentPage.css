@@ -1,0 +1,39 @@
+.payment-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.payment-card {
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 15px;
+  max-width: 400px;
+  margin: auto;
+  color: #fff;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.payment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 223, 100, 0.4);
+}
+
+.pay-btn {
+  width: 100%;
+  border-radius: 50px;
+  font-weight: 700;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.2rem;
+  box-shadow: 0 6px 20px rgba(255, 223, 100, 0.45);
+  transition: all 0.3s ease;
+}
+
+.pay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 223, 100, 0.6);
+  color: #000;
+}

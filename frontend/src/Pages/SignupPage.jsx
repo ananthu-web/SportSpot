@@ -1,19 +1,39 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Styles/Auth.css";
+import API from "../API";
 
 function SignupPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add signup logic here
-    alert(`Signed up with: ${name}, ${email}`);
-    navigate("/login"); // Redirect to login after signup
-  };
+  const handleSignup = async (e) => {
+  e.preventDefault();
+  setError(""); // clear previous errors
+
+  try {
+    const response = await API.post("/api/auth/signup", {
+      name,
+      email,
+      password,
+    });
+
+    console.log("Signup success:", response.data);
+
+    // Save JWT in localStorage
+    localStorage.setItem("token", response.data.token);
+
+    // Redirect to home/dashboard
+    navigate("/");
+  } catch (err) {
+    // Show error message
+    setError(err.response?.data?.message || "Something went wrong");
+    console.error("Signup error:", err.response?.data?.message);
+  }
+};
 
   return (
     <div className="auth-page">
@@ -24,7 +44,7 @@ function SignupPage() {
         </h2>
         <p className="auth-subtitle">Create your account to book sports courts</p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSignup}>
           <input
             type="text"
             placeholder="Full Name"

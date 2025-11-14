@@ -1,0 +1,193 @@
+.booking-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.lcp.com%2Fmedia%2Fesuky3bq%2Flcp-sports-football.jpg&f=1&nofb=1&ipt=9f3bcc1f11d16d4af77366415cb3d42a767689aaf58dfb80e9ee2682775bef28') center/cover no-repeat;
+  padding: 40px;
+}
+
+.booking-container {
+  background: rgba(255, 255, 255, 0.15); /* slightly less transparent */
+  backdrop-filter: blur(10px); /* moderate blur */
+  border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 1000px;
+  text-align: center;
+  color: black;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+.booking-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  padding-bottom: 10px;
+}
+
+.booking-subtitle {
+  margin-bottom: 25px;
+  font-size: 1rem;
+  color: black;
+}
+
+.booking-btn {
+  background: rgba(255,255,255,0.2);
+  color:rgb(15, 7, 7);
+  border: 1px solid rgba(52, 30, 30, 0.3);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+.booking-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.05);
+}
+
+.confirm {
+  margin-top: 20px;
+}
+
+.map-and-courts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.court-card {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 15px;
+  width: 280px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  /* border: 1px solid rgba(255,255,255,0.25); */
+  border: 1px solid rgba(52, 30, 30, 0.3);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.court-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(255,255,255,0.35);
+}
+
+.court-map {
+  width: 100%;
+  height: 150px;
+  border-radius: 12px;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.select-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(52, 30, 30, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  color: black;
+  padding: 8px 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.select-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.05);
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  margin-top: 25px;
+
+}
+
+.slot-card {
+  background: rgba(255,255,255,0.12); /* less transparent */
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  /* border: 1px solid rgba(15, 1, 1, 0.2); */
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.slot-card.available:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+
+}
+
+.slot-card.booked {
+  opacity: 0.6;
+  cursor: not-allowed;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+
+}
+
+
+
+
+/* ===== Zoom In Animation ===== */
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== Main Card Zoom Animation ===== */
+@keyframes zoomInMain {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== Apply Animations ===== */
+/* Main cards zoom in first */
+.booking-container, .court-card {
+  animation: zoomInMain 0.5s ease forwards;
+}
+
+/* Slot cards zoom in (after main card) */
+.slot-card {
+  animation: zoomIn 0.4s ease forwards;
+}
+
+/* Optional: staggered entrance for slot cards */
+.slot-card:nth-child(1) { animation-delay: 0.6s; }
+.slot-card:nth-child(2) { animation-delay: 0.7s; }
+.slot-card:nth-child(3) { animation-delay: 0.8s; }
+.slot-card:nth-child(4) { animation-delay: 0.9s; }
+.slot-card:nth-child(5) { animation-delay: 1s; }
+.slot-card:nth-child(6) { animation-delay: 1.1s; }
+
+/* Optional: staggered entrance for multiple main cards */
+.court-card:nth-child(1) { animation-delay: 0s; }
+.court-card:nth-child(2) { animation-delay: 0.1s; }
+.court-card:nth-child(3) { animation-delay: 0.2s; }
+.court-card:nth-child(4) { animation-delay: 0.3s; }

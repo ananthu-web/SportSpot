@@ -13,7 +13,7 @@
   background: #111;
   padding: 40px 30px;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 6px 20px rgba(255, 230, 100, 0.5);
   width: 350px;
   text-align: center;
   transition: transform 0.4s ease;
@@ -97,4 +97,59 @@
 
 .auth-footer a:hover {
   text-decoration: underline;
+}
+
+
+
+
+
+@media (max-width: 991px) {
+  /* Stack nav links vertically */
+  .nav-links {
+    flex-direction: column !important;
+    gap: 15px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links .nav-item {
+    margin: 0;
+    width: 100%;
+    font-size: 1.2rem;
+    text-align: center;
+    position: relative; /* ensure ::after is relative to link */
+  }
+
+  /* Prevent hover line from overflowing */
+  .nav-links .nav-item::after {
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background-color: #ffd700;
+    transition: width 0.3s ease;
+  }
+
+  .nav-links .nav-item:hover::after {
+    width: 100%; /* stays inside the link only */
+  }
+
+  /* Add spacing below the last nav link (Contact) */
+  .nav-links .nav-item:last-child {
+    margin-bottom: 30px; /* separates buttons from last link */
+  }
+
+  /* Buttons container */
+  .d-flex.flex-column.flex-lg-row {
+    flex-direction: column !important;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .custom-btn {
+    width: 80%;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 1rem;
+  }
 }

@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button, Container } from "react-bootstrap";
 import "../Styles/Banner.css";
 import images from "../Data/BannerData";
+import { Link, Navigate } from "react-router-dom";
 
 export default function Banner() {
-  
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -36,22 +35,24 @@ export default function Banner() {
           click.
         </p>
         <Button
-  className="book-btn"
-  style={{
-    backgroundColor: "#ffc107", // yellow
-    border: "none",
-    borderRadius: "50px", // pill shape
-    color: "#000",
-    fontWeight: "700",
-    fontSize: "1.2rem", // slightly bigger text
-    padding: "0.5rem 1.5rem", // smaller button
-    boxShadow: "0 0 10px rgba(255, 193, 7, 0.6)",
-    outline: "none"
-  }}
-  onMouseDown={(e) => e.preventDefault()} // prevents blue focus ring
->
-  Book Now
-</Button>
+          as={Link} // <-- render as Link
+          to="/booking/football"
+          className="book-btn"
+          style={{
+            backgroundColor: "#ffc107", // yellow
+            border: "none",
+            borderRadius: "50px", // pill shape
+            color: "#000",
+            fontWeight: "700",
+            fontSize: "1.2rem", // slightly bigger text
+            padding: "0.5rem 1.5rem", // smaller button
+            boxShadow: "0 0 10px rgba(255, 193, 7, 0.6)",
+            outline: "none",
+          }}
+          onMouseDown={(e) => e.preventDefault()} // prevents blue focus ring
+        >
+          Book Now
+        </Button>
       </Container>
     </div>
   );
