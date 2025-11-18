@@ -1,15 +1,14 @@
-
-import MainRouter from './MainRouter'
+import MainRouter from "./MainRouter";
+import { UserProvider } from "./UserContext";
 
 function App() {
-
   return (
     <>
-
-    <MainRouter/>
-      
+      <UserProvider>
+        <MainRouter />
+      </UserProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

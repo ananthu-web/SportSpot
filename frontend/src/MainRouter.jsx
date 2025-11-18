@@ -7,7 +7,6 @@ import NavigationBar from './Components/Navbar.jsx'
 import SportsPage from './Pages/SportsPage.jsx'
 import ScrollToTop from './Components/ScrollToTop.jsx'
 import BookingPage from './Pages/BookingPage.jsx'
-import BookingSlotsPage from './Pages/BookingSlotsPage.jsx'
 
 
 function MainRouter() {
@@ -21,7 +20,6 @@ function MainRouter() {
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='signup' element={<SignupPage/>}/>
         <Route path="/booking/:sportId" element={<BookingPage />} />
-        <Route path="/booking-slots" element={<BookingSlotsPage/>}/>
 
     </Routes>
     

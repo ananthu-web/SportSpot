@@ -1,4 +1,4 @@
-import User from "../Models/User";
+import User from "../Models/User.js"
 import jwt from "jsonwebtoken";
 
 
@@ -47,3 +47,4 @@ export const login = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+

@@ -3,6 +3,7 @@ import cors from "cors"
 import mongoose from "mongoose";
 import Dotenv  from "dotenv";
 import authRoutes from "./Router/AuthRoutes.js"
+import { seedData } from "./Controller/SportsData.js";
 
 Dotenv.config()
 
@@ -18,8 +19,12 @@ app.use("/api/auth", authRoutes);
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  
 })
-.then(() => console.log('MongoDB connected'))
+.then(async() => {
+  
+  console.log('MongoDB connected')})
+  await seedData()
 .catch(err => console.log('MongoDB connection error:', err));
 
 app.get("/",(req,res)=>{

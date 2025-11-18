@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Styles/Auth.css";
 import API from "../API";
+import { UserContext } from "../UserContext";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const {login} = useContext(UserContext)
   const handleSignup = async (e) => {
   e.preventDefault();
   setError(""); // clear previous errors
@@ -25,7 +27,12 @@ function SignupPage() {
 
     // Save JWT in localStorage
     localStorage.setItem("token", response.data.token);
-
+ login({
+        name: response.data.name,
+        email: response.data.email,
+        id: response.data._id,
+        token: response.data.token,
+      });
     // Redirect to home/dashboard
     navigate("/");
   } catch (err) {

@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import React, { useState, useEffect, useContext } from "react";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import "../Styles/Navbar.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { UserContext } from "../UserContext";
+
+
 
 function NavigationBar() {
+  const {user,logout} =useContext(UserContext)
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,6 +35,8 @@ function NavigationBar() {
       }
     }
   };
+
+  
 
   return (
     <Navbar
@@ -77,18 +83,71 @@ function NavigationBar() {
               Contact
             </Nav.Link>
           </Nav>
-          <div className="d-flex align-items-center">
+
+          
+          {/* <div className="d-flex align-items-center">
             <Link to="/login" onClick={() => setExpanded(false)} className="custom-btn btn-login me-3">
-              Login
+              Signin
             </Link>
-            <Link to="/signup" onClick={() => setExpanded(false)} className="custom-btn btn-signup">
-              Signup
-            </Link>
-          </div>
+          </div> */}
+
+          {/* RIGHT SIDE BUTTONS */}
+<div className="d-flex align-items-center gap-3">
+
+  {user ? (
+    <>
+      {/* User Icon + Welcome */}
+      <div className="d-flex align-items-center">
+        <i className="bi bi-person-circle text-light fs-4 me-2"></i>
+        <span className="text-light fw-semibold">Hi, {user.name}</span>
+      </div>
+
+      {/* Logout Button */}
+   <button 
+  onClick={logout} 
+  className=" custom-btn btn-logout me-3 ms-3"
+>
+  Logout
+</button>
+
+      {/* Dropdown Menu */}
+      <NavDropdown
+        title="⋮" 
+        id="user-dropdown" 
+        align="end" 
+        menuVariant="dark"
+      >
+        <NavDropdown.Item as={Link} to="/profile">
+          Profile
+        </NavDropdown.Item>
+
+        <NavDropdown.Item as={Link} to="/settings">
+          Settings
+        </NavDropdown.Item>
+
+        <NavDropdown.Divider />
+
+        <NavDropdown.Item as={Link} to="/help">
+          Help & Support
+        </NavDropdown.Item>
+      </NavDropdown>
+    </>
+  ) : (
+    // If not logged in → Show Signin button
+    <Link
+      to="/login"
+      onClick={() => setExpanded(false)}
+      className="custom-btn btn-login me-3"
+    >
+      Signin
+    </Link>
+  )}
+</div>
+
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-}
 
+}
 export default NavigationBar;

@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Styles/Auth.css"; // We'll create shared CSS for login/signup
 import API from "../API";
+import { UserContext } from "../UserContext";
+
 
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
+  const {login} =useContext(UserContext)
+
  const handleLogin = async (e) => {
   e.preventDefault();
   try {
     const response = await API.post("/api/auth/login", { email, password });
     localStorage.setItem("token", response.data.token);
+  login({
+        name: response.data.name,
+        email: response.data.email,
+       
+        token:response.data.token,
+      });
     navigate("/"); // Redirect after successful login
   } catch (err) {
     console.error("Login error:", err.response.data.message);

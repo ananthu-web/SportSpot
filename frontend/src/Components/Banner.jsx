@@ -36,7 +36,7 @@ export default function Banner() {
         </p>
         <Button
           as={Link} // <-- render as Link
-          to="/booking/football"
+          to="/sports"
           className="book-btn"
           style={{
             backgroundColor: "#ffc107", // yellow
