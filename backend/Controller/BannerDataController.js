@@ -10,7 +10,7 @@ export const seedBannerData=async ()=>{
 
         await Banner.insertMany(BannerData)
         console.log("Banner data inserted succesfully");
-
+        
     }catch(error){
         console.error("Banner data seeding error:",error)
     }
