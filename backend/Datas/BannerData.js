@@ -20,23 +20,23 @@ const BannerData = [
 
   {
     name: "Boxing",
-    image: "src/Data/2503324.jpg"
+    image: "http://localhost:3000/images/2503324.jpg"
   },
   {
     name: "Cricket",
-    image: "src/Data/4651155.jpg"
+    image: "http://localhost:3000/images/4651155.jpg"
   },
   {
     name: "Badminton",
-    image: "src/Data/badminton-concept-with-shuttlecock-racket.jpg"
+    image: "http://localhost:3000/images/badminton-concept-with-shuttlecock-racket.jpg"
   },
   {
     name: "Tennis",
-    image: "src/Data/j-schiemann-Z4Sxy1_3wdY-unsplash.jpg"
+    image: "http://localhost:3000/images/j-schiemann-Z4Sxy1_3wdY-unsplash.jpg"
   },
   {
     name: "volleyball",
-    image: "src/Data/jannes-glas-0NaQQsLWLkA-unsplash.jpg"
+    image: "http://localhost:3000/images/jannes-glas-0NaQQsLWLkA-unsplash.jpg"
   },
 ];
 

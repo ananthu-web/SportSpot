@@ -1,11 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Button, Container } from "react-bootstrap";
 import "../Styles/Banner.css";
-import images from "../Data/BannerData";
 import { Link, Navigate } from "react-router-dom";
+import axios from "axios"
+
 
 export default function Banner() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [images,setImages]=useState([])
+
+
+  useEffect( ()=>{
+    const loadbanner=async()=>{
+      try{
+        const res = await axios.get("http://localhost:3000/api/data/banner")
+        const urls = res.data.map((item)=>item.image)
+        setImages(urls)
+
+      }catch(error){
+        console.log("error fetching banners",error);  
+      }
+    }
+    loadbanner();
+  },[])
+ 
 
   useEffect(() => {
     const interval = setInterval(() => {

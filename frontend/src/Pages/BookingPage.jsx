@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/BookingPage.css";
+import { useLocation } from "react-router-dom";
 
 function BookingPage() {
   const [locationAllowed, setLocationAllowed] = useState(null);
@@ -7,6 +8,8 @@ function BookingPage() {
   const [selectedCourt, setSelectedCourt] = useState(null);
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const location = useLocation()
+  const { sport } = location.state || {}
 
   // Request location
   const requestLocation = () => {
@@ -21,9 +24,14 @@ function BookingPage() {
     if (locationAllowed) {
       setTimeout(() => {
         setCourts([
+          // { id: 1, name: "City Sports Arena", distance: "2.3 km", map: "https://maps.google.com?q=City+Sports+Arena&output=embed" },
+          // { id: 2, name: "Elite Turf Ground", distance: "4.8 km", map: "https://maps.google.com?q=Elite+Turf+Ground&output=embed" },
+          // { id: 3, name: "Golden Field Court", distance: "7.1 km", map: "https://maps.google.com?q=Golden+Field+Court&output=embed" },
           { id: 1, name: "City Sports Arena", distance: "2.3 km", map: "https://maps.google.com?q=City+Sports+Arena&output=embed" },
           { id: 2, name: "Elite Turf Ground", distance: "4.8 km", map: "https://maps.google.com?q=Elite+Turf+Ground&output=embed" },
           { id: 3, name: "Golden Field Court", distance: "7.1 km", map: "https://maps.google.com?q=Golden+Field+Court&output=embed" },
+          { id: 4, name: "Sunshine Sports Complex", distance: "3.2 km", map: "https://maps.google.com?q=Sunshine+Sports+Complex&output=embed" },
+          { id: 5, name: "Downtown Stadium", distance: "5.6 km", map: "https://maps.google.com?q=Downtown+Stadium&output=embed" },
         ]);
       }, 1000);
     }
@@ -63,7 +71,13 @@ function BookingPage() {
   };
 
   return (
-    <div className="booking-page">
+    <div className="booking-page" style={{
+      backgroundImage: sport ? `url(${sport.image})` : '',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      minHeight: '100vh',
+    }}>
       <div className="booking-container">
         {/* Request Location */}
         {!locationAllowed && !selectedCourt && (
@@ -121,9 +135,8 @@ function BookingPage() {
               {slots.map((slot, idx) => (
                 <div
                   key={idx}
-                  className={`slot-card ${slot.booked ? "booked" : "available"} ${
-                    selectedSlot === slot.time ? "selected" : ""
-                  }`}
+                  className={`slot-card ${slot.booked ? "booked" : "available"} ${selectedSlot === slot.time ? "selected" : ""
+                    }`}
                   onClick={() => !slot.booked && setSelectedSlot(slot.time)}
                 >
                   {slot.time}

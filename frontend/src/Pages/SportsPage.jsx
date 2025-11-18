@@ -1,14 +1,27 @@
 import "../Styles/SportsPage.css";
-import SportsData from "../Data/SportsData";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
+import axios from "axios";
 
 
 function SportsPage() {
 
   const {user}=useContext(UserContext)
   const Navigate=useNavigate()
+  const [SportsData,setSportsData]=useState([])
+
+  useEffect(()=>{
+    const loadsports=async()=>{
+      try{
+        const res = await axios.get("http://localhost:3000/api/data/sports")
+        setSportsData(res.data)
+      }catch(error){
+        console.log("error fetching sportsdata",error);
+      }
+    }
+    loadsports()
+  },[])
 
   return (
     <section className="sports-page">
@@ -30,7 +43,7 @@ function SportsPage() {
                 <button className="book-btn"
                 onClick={()=>{
                   if(user){
-                    Navigate("/booking/:sportId")
+                    Navigate(`/booking/${sport._id}`,{state:{sport}} )
                   }else{
                     alert("You need to login first !!")
                     Navigate("/login")
