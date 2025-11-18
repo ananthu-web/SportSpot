@@ -1,10 +1,15 @@
-import React from "react";
 import "../Styles/SportsPage.css";
 import SportsData from "../Data/SportsData";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../UserContext";
 
 
 function SportsPage() {
+
+  const {user}=useContext(UserContext)
+  const Navigate=useNavigate()
+
   return (
     <section className="sports-page">
       <div className="sports-header">
@@ -22,9 +27,16 @@ function SportsPage() {
               <h2>{sport.name}</h2>
               <p>{sport.description}</p>
 
-               <Link to={`/booking/${sport.id}`} className="book-link">
-                <button className="book-btn">Book Now</button>
-              </Link>
+                <button className="book-btn"
+                onClick={()=>{
+                  if(user){
+                    Navigate("/booking/:sportId")
+                  }else{
+                    alert("You need to login first !!")
+                    Navigate("/login")
+                  }
+                }}
+                >Book Now</button>
 
             </div>
           </div>

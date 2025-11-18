@@ -10,11 +10,12 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const {login} = useContext(UserContext)
+
+
   const handleSignup = async (e) => {
   e.preventDefault();
-  setError(""); // clear previous errors
+  setError("");
 
   try {
     const response = await API.post("/api/auth/signup", {
@@ -77,6 +78,8 @@ function SignupPage() {
             Signup
           </button>
         </form>
+
+        {error && <p className="auth-error">{error}</p>}
 
         <p className="auth-footer">
           Already have an account? <Link to="/login">Login</Link>

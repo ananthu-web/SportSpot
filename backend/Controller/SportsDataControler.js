@@ -2,7 +2,7 @@ import Sport from "../Models/Sports.js";
 import SportsData from"../Datas/SportsData.js";
 
 
-export const seedData = async () => {
+export const seedSportsData = async () => {
   try {
     
     await Sport.deleteMany();
@@ -11,10 +11,8 @@ export const seedData = async () => {
     await Sport.insertMany(SportsData);
     console.log("Sports data inserted successfully!");
 
-    process.exit();
   } catch (error) {
     console.error("Seeding error:", error);
-    process.exit(1);
   }
 };
 
