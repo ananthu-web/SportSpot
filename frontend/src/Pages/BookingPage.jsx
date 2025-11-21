@@ -1,74 +1,86 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/BookingPage.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function BookingPage() {
   const [locationAllowed, setLocationAllowed] = useState(null);
   const [courts, setCourts] = useState([]);
-  const [selectedCourt, setSelectedCourt] = useState(null);
-  const [slots, setSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
   const location = useLocation()
   const { sport } = location.state || {}
+  const Navigate=useNavigate()
+  const [userLocation, setUserLocation] = useState(null);
+
+
 
   // Request location
-  const requestLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      () => setLocationAllowed(true),
-      () => setLocationAllowed(false)
-    );
+// Get user location
+   const requestLocation = () => {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      setUserLocation({
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+      });
+      setLocationAllowed(true);
+    },
+    () => setLocationAllowed(false)
+  );
+};
+
+
+
+//  DISTANCE CALCULATION FUNCTION
+  // -------------------------
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // radius of Earth in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) ** 2;
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return (R * c).toFixed(1); // km
   };
+
+
 
   // Load nearby courts after allowing location
-  useEffect(() => {
-    if (locationAllowed) {
-      setTimeout(() => {
-        setCourts([
-          // { id: 1, name: "City Sports Arena", distance: "2.3 km", map: "https://maps.google.com?q=City+Sports+Arena&output=embed" },
-          // { id: 2, name: "Elite Turf Ground", distance: "4.8 km", map: "https://maps.google.com?q=Elite+Turf+Ground&output=embed" },
-          // { id: 3, name: "Golden Field Court", distance: "7.1 km", map: "https://maps.google.com?q=Golden+Field+Court&output=embed" },
-          { id: 1, name: "City Sports Arena", distance: "2.3 km", map: "https://maps.google.com?q=City+Sports+Arena&output=embed" },
-          { id: 2, name: "Elite Turf Ground", distance: "4.8 km", map: "https://maps.google.com?q=Elite+Turf+Ground&output=embed" },
-          { id: 3, name: "Golden Field Court", distance: "7.1 km", map: "https://maps.google.com?q=Golden+Field+Court&output=embed" },
-          { id: 4, name: "Sunshine Sports Complex", distance: "3.2 km", map: "https://maps.google.com?q=Sunshine+Sports+Complex&output=embed" },
-          { id: 5, name: "Downtown Stadium", distance: "5.6 km", map: "https://maps.google.com?q=Downtown+Stadium&output=embed" },
-        ]);
-      }, 1000);
-    }
-  }, [locationAllowed]);
+useEffect(() => {
+  if (locationAllowed && userLocation) {
+    const fetchCourts = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/courts/carddetails");
+        const data = await res.json();
 
-  // Load slots when a court is selected
-  useEffect(() => {
-    if (selectedCourt) {
-      setSlots([
-        { time: "5:00 AM - 6:00 AM", booked: false },
-        { time: "6:00 AM - 7:00 AM", booked: false },
-        { time: "7:00 AM - 8:00 AM", booked: true },
-        { time: "8:00 AM - 9:00 AM", booked: true },
-        { time: "9:00 AM - 10:00 AM", booked: false },
-        { time: "10:00 AM - 11:00 AM", booked: false },
-        { time: "11:00 AM - 12:00 PM", booked: false },
-        { time: "4:00 PM - 5:00 PM", booked: false },
-        { time: "5:00 PM - 6:00 PM", booked: true },
-        { time: "6:00 PM - 7:00 PM", booked: false },
-        { time: "7:00 PM - 8:00 PM", booked: true },
-        { time: "8:00 PM - 9:00 PM", booked: false },
-        { time: "9:00 PM - 10:00 PM", booked: false },
-        { time: "10:00 PM - 11:00 PM", booked: true },
-        { time: "11:00 PM - 12:00 AM", booked: false },
+        const filtered= data.filter(court=>court.sportType===sport.name)
+        .map((court) => ({
+              ...court,
+              distance:
+                getDistance(
+                  userLocation.lat,
+                  userLocation.lon,
+                  court.latitude,
+                  court.longitude
+                ) + " km",
+            }));
+
+        setCourts(filtered);
+      } catch (err) {
+        console.error("Error fetching courts:", err);
+      }
+    };
+
+    fetchCourts();
+  }
+}, [locationAllowed]);
 
 
-      ]);
-    }
-  }, [selectedCourt]);
 
-  const handleCourtSelect = (court) => {
-    setSelectedCourt(court);
-  };
-
-  const confirmBooking = () => {
-    alert(`You booked ${selectedSlot} at ${selectedCourt.name}`);
-  };
+ 
 
   return (
     <div className="booking-page" style={{
@@ -80,7 +92,7 @@ function BookingPage() {
     }}>
       <div className="booking-container">
         {/* Request Location */}
-        {!locationAllowed && !selectedCourt && (
+        {!locationAllowed && (
           <>
             <h2 className="booking-title">Find Nearby Courts</h2>
             <p className="booking-subtitle">
@@ -98,7 +110,7 @@ function BookingPage() {
         )}
 
         {/* Show Courts */}
-        {locationAllowed && !selectedCourt && (
+        {locationAllowed && (
           <>
             <h2 className="booking-title">Choose a Nearby Court</h2>
             {courts.length === 0 ? (
@@ -106,7 +118,7 @@ function BookingPage() {
             ) : (
               <div className="map-and-courts">
                 {courts.map((court) => (
-                  <div key={court.id} className="court-card">
+                  <div key={court._id} className="court-card">
                     <iframe
                       src={court.map}
                       title={court.name}
@@ -116,7 +128,8 @@ function BookingPage() {
                     <p>{court.distance} away</p>
                     <button
                       className="select-btn"
-                      onClick={() => handleCourtSelect(court)}
+                      // onClick={() => handleCourtSelect(court)}
+                      onClick={()=>Navigate('/courtdetails')}
                     >
                       Select
                     </button>
@@ -128,7 +141,7 @@ function BookingPage() {
         )}
 
         {/* Show Slots */}
-        {selectedCourt && (
+        {/* {selectedCourt && (
           <>
             <h2 className="booking-title">Available Slots at {selectedCourt.name}</h2>
             <div className="slots-grid">
@@ -149,7 +162,7 @@ function BookingPage() {
               </button>
             )}
           </>
-        )}
+        )} */}
       </div>
     </div>
   );

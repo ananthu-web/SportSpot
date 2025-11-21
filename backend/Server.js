@@ -6,6 +6,8 @@ import { seedSportsData } from "./Controller/SportsDataControler.js";
 import { connectDB } from "./DataBase.js";
 import { seedBannerData } from "./Controller/BannerDataController.js";
 import dataRoutes from "./Router/SportsRoutes.js"
+import { seedCourtData } from "./Controller/CourtDataController.js";
+import courtroutes  from "./Router/CourtRoutes.js"
 
 Dotenv.config()
 
@@ -18,6 +20,7 @@ app.use("/images", express.static("Public/Images"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/data",dataRoutes)
+app.use("/api/courts",courtroutes)
 
 
 app.get("/",(req,res)=>{
@@ -28,7 +31,8 @@ const startServer = async () => {
   try {
     await connectDB();
     await seedBannerData()
-    await seedSportsData();  
+    await seedSportsData(); 
+    await seedCourtData() 
 
     const PORT = process.env.PORT;
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,0 +1,91 @@
+/* Page wrapper */
+.court-details-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.4bUPJInGEXHRYOajCrlXNwHaEJ%3Fpid%3DApi&f=1&ipt=7c224c95a88073f489450a1c8e761d0f6ca61f41f26fb2062a6cbb925dffea13&ipo=images') no-repeat center;
+  background-size: cover;
+}
+
+/* MAIN GLASS CARD */
+.court-details-container {
+  width: 90%;
+  max-width: 1100px;
+  max-height: 85vh;
+
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+
+  padding: 35px;
+  overflow-y: auto;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.3);
+
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* TITLE */
+.court-details-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.court-details-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin-top: -10px;
+}
+
+/* SECTION BLOCK */
+.court-section {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.20);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Section titles */
+.court-section h2 {
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+}
+
+/* Info Grid */
+.court-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* Photos */
+.court-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 15px;
+}
+
+.court-photos-grid img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Smooth entry animation */
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.court-details-container {
+  animation: fadeUp 0.5s ease-out;
+}

@@ -4,24 +4,22 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
 
-
 function SportsPage() {
+  const { user } = useContext(UserContext);
+  const Navigate = useNavigate();
+  const [SportsData, setSportsData] = useState([]);
 
-  const {user}=useContext(UserContext)
-  const Navigate=useNavigate()
-  const [SportsData,setSportsData]=useState([])
-
-  useEffect(()=>{
-    const loadsports=async()=>{
-      try{
-        const res = await axios.get("http://localhost:3000/api/data/sports")
-        setSportsData(res.data)
-      }catch(error){
-        console.log("error fetching sportsdata",error);
+  useEffect(() => {
+    const loadsports = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/data/sports");
+        setSportsData(res.data);
+      } catch (error) {
+        console.log("error fetching sportsdata", error);
       }
-    }
-    loadsports()
-  },[])
+    };
+    loadsports();
+  }, []);
 
   return (
     <section className="sports-page">
@@ -40,17 +38,19 @@ function SportsPage() {
               <h2>{sport.name}</h2>
               <p>{sport.description}</p>
 
-                <button className="book-btn"
-                onClick={()=>{
-                  if(user){
-                    Navigate(`/booking/${sport._id}`,{state:{sport}} )
-                  }else{
-                    alert("You need to login first !!")
-                    Navigate("/login")
+              <button
+                className="book-btn"
+                onClick={() => {
+                  if (user) {
+                    Navigate(`/booking/${sport._id}`, { state: { sport } });
+                  } else {
+                    alert("You need to login first !!");
+                    Navigate("/login");
                   }
                 }}
-                >Book Now</button>
-
+              >
+                Book Now
+              </button>
             </div>
           </div>
         ))}
