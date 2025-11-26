@@ -4,10 +4,8 @@ import "../Styles/Navbar.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
-
-
 function NavigationBar() {
-  const {user,logout} =useContext(UserContext)
+  const { user, logout } = useContext(UserContext);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,8 +34,6 @@ function NavigationBar() {
     }
   };
 
-  
-
   return (
     <Navbar
       expanded={expanded}
@@ -58,11 +54,14 @@ function NavigationBar() {
               as={Link}
               to={"/"}
               className="nav-item"
-              onClick={() =>{ scrollToSection("home");setExpanded(false);}}
+              onClick={() => {
+                scrollToSection("home");
+                setExpanded(false);
+              }}
             >
               Home
             </Nav.Link>
-            
+
             <Nav.Link
               className="nav-item"
               onClick={() => {
@@ -76,78 +75,82 @@ function NavigationBar() {
             <Nav.Link as={Link} to="/sports" className="nav-item">
               Sports
             </Nav.Link>
-            <Nav.Link
-              className="nav-item"
-              onClick={() => {scrollToSection("contact");setExpanded(false);}}
-            >
-              Contact
-            </Nav.Link>
+
+            {user?.isAdmin ? (
+              // If admin → show Court Details
+              <Nav.Link as={Link} to="/ownerpage" className="nav-item">
+                Court Details
+              </Nav.Link>
+            ) : (
+              // If normal user → show Contact
+              <Nav.Link
+                className="nav-item"
+                onClick={() => {
+                  scrollToSection("contact");
+                  setExpanded(false);
+                }}
+              >
+                Contact
+              </Nav.Link>
+            )}
           </Nav>
 
-          
-          {/* <div className="d-flex align-items-center">
-            <Link to="/login" onClick={() => setExpanded(false)} className="custom-btn btn-login me-3">
-              Signin
-            </Link>
-          </div> */}
-
           {/* RIGHT SIDE BUTTONS */}
-<div className="d-flex align-items-center gap-3">
+          <div className="d-flex align-items-center gap-3">
+            {user ? (
+              <>
+                {/* User Icon + Welcome */}
+                <div className="d-flex align-items-center">
+                  <i className="bi bi-person-circle text-light fs-4 me-2"></i>
+                  <span className="text-light fw-semibold">
+                    Hi, {user.name}
+                  </span>
+                </div>
 
-  {user ? (
-    <>
-      {/* User Icon + Welcome */}
-      <div className="d-flex align-items-center">
-        <i className="bi bi-person-circle text-light fs-4 me-2"></i>
-        <span className="text-light fw-semibold">Hi, {user.name}</span>
-      </div>
+                {/* Logout Button */}
+                <button
+                  onClick={logout}
+                  className=" custom-btn btn-logout me-3 ms-3"
+                >
+                  Logout
+                </button>
 
-      {/* Logout Button */}
-   <button 
-  onClick={logout} 
-  className=" custom-btn btn-logout me-3 ms-3"
->
-  Logout
-</button>
+                {/* Dropdown Menu */}
+                <NavDropdown
+                  title="⋮"
+                  id="user-dropdown"
+                  align="end"
+                  menuVariant="dark"
+                >
+                  <NavDropdown.Item as={Link} to="/profile">
+                    Profile
+                  </NavDropdown.Item>
 
-      {/* Dropdown Menu */}
-      <NavDropdown
-        title="⋮" 
-        id="user-dropdown" 
-        align="end" 
-        menuVariant="dark"
-      >
-        <NavDropdown.Item as={Link} to="/profile">
-          Profile
-        </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/settings">
+                    Settings
+                  </NavDropdown.Item>
 
-        <NavDropdown.Item as={Link} to="/settings">
-          Settings
-        </NavDropdown.Item>
+                  <NavDropdown.Divider />
 
-        <NavDropdown.Divider />
-
-        <NavDropdown.Item as={Link} to="/help">
-          Help & Support
-        </NavDropdown.Item>
-      </NavDropdown>
-    </>
-  ) : (
-    // If not logged in → Show Signin button
-    <Link
-      to="/login"
-      onClick={() => setExpanded(false)}
-      className="custom-btn btn-login me-3"
-    >
-      Signin
-    </Link>
-  )}
-</div>
-
+                  <NavDropdown.Item as={Link} to="/help">
+                    Help & Support
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </>
+            ) : (
+              // If not logged in → Show Signin button
+              <Link
+                to="/login"
+                onClick={() => setExpanded(false)}
+                className="custom-btn btn-login me-3"
+              >
+                Signin
+              </Link>
+            )}
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-
 }
 export default NavigationBar;

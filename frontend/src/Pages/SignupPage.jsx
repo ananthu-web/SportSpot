@@ -10,45 +10,47 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const {login} = useContext(UserContext)
-
+  const { login } = useContext(UserContext);
 
   const handleSignup = async (e) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  try {
-    const response = await API.post("/api/auth/signup", {
-      name,
-      email,
-      password,
-    });
+    try {
+      const response = await API.post("/api/auth/signup", {
+        name,
+        email,
+        password,
+        role,
+      });
 
-    console.log("Signup success:", response.data);
+      console.log("Signup success:", response.data);
 
-    // Save JWT in localStorage
-    localStorage.setItem("token", response.data.token);
- login({
+      // Save JWT in localStorage
+      localStorage.setItem("token", response.data.token);
+
+      login({
         name: response.data.name,
         email: response.data.email,
         id: response.data._id,
+        role: response.data.role,
         token: response.data.token,
       });
-    // Redirect to home/dashboard
-    navigate("/");
-  } catch (err) {
-    // Show error message
-    setError(err.response?.data?.message || "Something went wrong");
-    console.error("Signup error:", err.response?.data?.message);
-  }
-};
+
+      // Redirect to home/dashboard
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong");
+      console.error("Signup error:", err.response?.data?.message);
+    }
+  };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
         <h2 className="auth-title">
           <span className="text-warning">Sport</span>
-          <span className="text-light">Spot</span>
+          <span className="court-text">Spot</span>
         </h2>
         <p className="auth-subtitle">Create your account to book sports courts</p>
 
@@ -74,6 +76,8 @@ function SignupPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
+
           <button type="submit" className="auth-btn">
             Signup
           </button>

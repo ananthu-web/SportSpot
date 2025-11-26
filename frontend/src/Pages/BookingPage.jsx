@@ -17,6 +17,7 @@ function BookingPage() {
    const requestLocation = () => {
   navigator.geolocation.getCurrentPosition(
     (pos) => {
+       console.log("User Real Location:", pos.coords.latitude, pos.coords.longitude);
       setUserLocation({
         lat: pos.coords.latitude,
         lon: pos.coords.longitude,
@@ -129,7 +130,7 @@ useEffect(() => {
                     <button
                       className="select-btn"
                       // onClick={() => handleCourtSelect(court)}
-                      onClick={()=>Navigate('/courtdetails')}
+                      onClick={()=>Navigate(`/courtdetails/${court._id}`,{state:{court,sport}})}
                     >
                       Select
                     </button>
@@ -140,29 +141,7 @@ useEffect(() => {
           </>
         )}
 
-        {/* Show Slots */}
-        {/* {selectedCourt && (
-          <>
-            <h2 className="booking-title">Available Slots at {selectedCourt.name}</h2>
-            <div className="slots-grid">
-              {slots.map((slot, idx) => (
-                <div
-                  key={idx}
-                  className={`slot-card ${slot.booked ? "booked" : "available"} ${selectedSlot === slot.time ? "selected" : ""
-                    }`}
-                  onClick={() => !slot.booked && setSelectedSlot(slot.time)}
-                >
-                  {slot.time}
-                </div>
-              ))}
-            </div>
-            {selectedSlot && (
-              <button className="booking-btn confirm" onClick={confirmBooking}>
-                Confirm Booking for {selectedSlot}
-              </button>
-            )}
-          </>
-        )} */}
+       
       </div>
     </div>
   );

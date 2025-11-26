@@ -126,6 +126,144 @@ export const CourtsData = [
     maxBookingHours: 2
   },
 
+  // Cricket
+  {
+    name: "Kaloor International Cricket Ground",
+    sportType: "Cricket",
+    location: "Kaloor, Kochi",
+    latitude: 9.9980,
+    longitude: 76.3070,
+    map: "https://www.google.com/maps?q=9.9980,76.3070&output=embed",
+    size: "70x15 m",
+    playerCount: 22,
+    courtType: "Outdoor, Grass",
+    bookingCharge: 800,
+    lighting: "Yes, Floodlights",
+    photos: [
+      "https://example.com/photos/cricket1.jpg",
+      "https://example.com/photos/cricket2.jpg",
+      "https://example.com/photos/cricket3.jpg"
+    ],
+    amenities: ["Seating", "Parking", "Changing Rooms", "Washrooms"],
+    equipmentAvailable: ["Cricket Bats", "Balls", "Wickets", "Scoreboard"],
+    slots: [
+      { time: "06:00-08:00", isBooked: false },
+      { time: "08:00-10:00", isBooked: true },
+      { time: "10:00-12:00", isBooked: false },
+      { time: "14:00-16:00", isBooked: false },
+      { time: "16:00-18:00", isBooked: true }
+    ],
+    rating: 4.7,
+    reviews: ["Excellent pitch and maintained well!", "Great place for weekend cricket"],
+    owner: { name: "Ravi Menon", phone: "9123456780", email: "ravi.cricket@example.com" },
+    maxBookingHours: 4
+  },
+  {
+    name: "Fort Kochi Cricket Club",
+    sportType: "Cricket",
+    location: "Fort Kochi, Kochi",
+    latitude: 9.9655,
+    longitude: 76.2425,
+    map: "https://www.google.com/maps?q=9.9655,76.2425&output=embed",
+    size: "65x14 m",
+    playerCount: 22,
+    courtType: "Outdoor, Grass",
+    bookingCharge: 700,
+    lighting: "No",
+    photos: ["https://example.com/photos/cricket4.jpg", "https://example.com/photos/cricket5.jpg"],
+    amenities: ["Seating", "Parking", "Washrooms"],
+    equipmentAvailable: ["Cricket Bats", "Balls"],
+    slots: [
+      { time: "07:00-09:00", isBooked: false },
+      { time: "09:00-11:00", isBooked: false },
+      { time: "11:00-13:00", isBooked: true },
+      { time: "15:00-17:00", isBooked: false }
+    ],
+    rating: 4.5,
+    reviews: ["Good ground for practice", "Well maintained"],
+    owner: { name: "Ajay Kumar", phone: "9876543214", email: "ajay.cricket@example.com" },
+    maxBookingHours: 3
+  },
+  {
+    name: "Marine Drive Cricket Ground",
+    sportType: "Cricket",
+    location: "Marine Drive, Kochi",
+    latitude: 9.9666,
+    longitude: 76.2870,
+    map: "https://www.google.com/maps?q=9.9666,76.2870&output=embed",
+    size: "72x16 m",
+    playerCount: 22,
+    courtType: "Outdoor, Turf",
+    bookingCharge: 900,
+    lighting: "Yes, Floodlights",
+    photos: ["https://example.com/photos/cricket6.jpg", "https://example.com/photos/cricket7.jpg"],
+    amenities: ["Seating", "Parking", "Changing Rooms", "Washrooms", "Refreshments"],
+    equipmentAvailable: ["Cricket Bats", "Balls", "Scoreboard"],
+    slots: [
+      { time: "06:00-08:00", isBooked: true },
+      { time: "08:00-10:00", isBooked: false },
+      { time: "10:00-12:00", isBooked: false },
+      { time: "14:00-16:00", isBooked: true }
+    ],
+    rating: 4.8,
+    reviews: ["Perfect pitch", "Great for tournaments"],
+    owner: { name: "Manoj Nair", phone: "9123456781", email: "manoj.cricket@example.com" },
+    maxBookingHours: 4
+  },
+  {
+    name: "Ernakulam Sports Complex",
+    sportType: "Cricket",
+    location: "Ernakulam, Kochi",
+    latitude: 10.0060,
+    longitude: 76.3180,
+    map: "https://www.google.com/maps?q=10.0060,76.3180&output=embed",
+    size: "68x15 m",
+    playerCount: 22,
+    courtType: "Outdoor, Grass",
+    bookingCharge: 750,
+    lighting: "No",
+    photos: ["https://example.com/photos/cricket8.jpg", "https://example.com/photos/cricket9.jpg"],
+    amenities: ["Seating", "Parking", "Washrooms"],
+    equipmentAvailable: ["Cricket Bats", "Balls", "Wickets"],
+    slots: [
+      { time: "07:00-09:00", isBooked: true },
+      { time: "09:00-11:00", isBooked: false },
+      { time: "11:00-13:00", isBooked: false },
+      { time: "15:00-17:00", isBooked: true }
+    ],
+    rating: 4.6,
+    reviews: ["Well-kept ground", "Nice for evening practice"],
+    owner: { name: "Suresh Kumar", phone: "9123456782", email: "suresh.cricket@example.com" },
+    maxBookingHours: 3
+  },
+  {
+    name: "Kochi Stadium Cricket Pitch",
+    sportType: "Cricket",
+    location: "Kochi Stadium, Kochi",
+    latitude: 9.9810,
+    longitude: 76.2890,
+    map: "https://www.google.com/maps?q=9.9810,76.2890&output=embed",
+    size: "75x17 m",
+    playerCount: 22,
+    courtType: "Outdoor, Turf",
+    bookingCharge: 1000,
+    lighting: "Yes, Floodlights",
+    photos: ["https://example.com/photos/cricket10.jpg", "https://example.com/photos/cricket11.jpg"],
+    amenities: ["Seating", "Parking", "Changing Rooms", "Washrooms", "Refreshments"],
+    equipmentAvailable: ["Cricket Bats", "Balls", "Scoreboard", "Wickets"],
+    slots: [
+      { time: "06:00-08:00", isBooked: false },
+      { time: "08:00-10:00", isBooked: true },
+      { time: "10:00-12:00", isBooked: false },
+      { time: "14:00-16:00", isBooked: false },
+      { time: "16:00-18:00", isBooked: true }
+    ],
+    rating: 4.9,
+    reviews: ["Professional pitch", "Excellent for matches"],
+    owner: { name: "Rahul Menon", phone: "9123456783", email: "rahul.cricket@example.com" },
+    maxBookingHours: 4
+  },
+
   // ------------------- Tennis -------------------
  {
     name: "Kaloor International Tennis Court",

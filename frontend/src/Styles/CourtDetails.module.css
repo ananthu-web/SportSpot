@@ -1,0 +1,189 @@
+/* Page wrapper with background */
+.courtDetailsPage {
+  min-height: 100vh;
+  padding: 120px 20px 40px; /* space for navbar */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #000; /* all text black */
+  font-family: 'Roboto', sans-serif; /* body text font */
+}
+
+/* Title & subtitle */
+.courtDetailsTitle {
+  font-family: 'Poppins', sans-serif; /* Heading font */
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  color: #fff; /* White text for contrast */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+  background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent dark background */
+  padding: 5px 12px; /* Padding around text */
+  border-radius: 6px; /* Rounded corners */
+  display: inline-block; /* Fit background to text width */
+}
+
+.courtDetailsSubtitle {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+  color: #fff;
+  opacity: 0.95;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 4px 10px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+/* Sections */
+.courtSection {
+  width: 100%;
+  max-width: 1000px;
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  background: rgba(255,255,255,0.7); /* optional subtle white for readability */
+  border-radius: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+/* Section headings */
+.courtSection h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Info Grid */
+.courtInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.infoCard {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  font-weight: 600;
+}
+
+/* Flex sections */
+.flexSection {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.flexSection > .courtSection {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
+
+/* Tags for amenities/equipment */
+.tagGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.1);
+  font-weight: 500;
+  color: #000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.95rem;
+}
+
+/* Horizontal scroll */
+.horizontalScroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding-bottom: 5px;
+}
+
+.slotCard, .photoCard {
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
+.slotCard {
+  padding: 6px 10px;
+  background: #4CAF50;
+  color: white;
+  min-width: 80px;
+  text-align: center;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif; /* slots use heading font */
+  font-size: 0.95rem;
+}
+
+.booked { background: #f44336 !important; }
+
+.photoCard {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Reviews */
+.reviewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.reviewCard {
+  padding: 12px 15px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.05);
+  font-style: italic;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Map */
+.mapCard {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  border: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* General zoom effect for cards */
+.courtSection,
+.slotCard,
+.photoCard,
+.reviewCard {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.courtSection:hover,
+.slotCard:hover,
+.photoCard:hover,
+.reviewCard:hover {
+  transform: scale(1.03); /* zoom slightly */
+  box-shadow: 0 12px 25px rgba(0,0,0,0.35); /* optional shadow for depth */
+}
