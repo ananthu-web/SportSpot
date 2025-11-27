@@ -21,7 +21,7 @@ function SignupPage() {
         name,
         email,
         password,
-        role,
+        
       });
 
       console.log("Signup success:", response.data);
@@ -33,7 +33,7 @@ function SignupPage() {
         name: response.data.name,
         email: response.data.email,
         id: response.data._id,
-        role: response.data.role,
+        isAdmin: response.data.isAdmin,
         token: response.data.token,
       });
 

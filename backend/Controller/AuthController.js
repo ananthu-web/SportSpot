@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 // Generate JWT
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+  return jwt.sign({ id,isAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
 // Signup
@@ -15,12 +15,12 @@ export const signup = async (req, res) => {
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: "User already exists" });
 
-    const user = await User.create({ name, email, password,isAdmin:false });
+    const user = await User.create({ name, email, password });
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      token: generateToken(user._id),
+      token: generateToken(user._id,user.isAdmin),
       isAdmin:user.isAdmin
     });
   } catch (err) {
@@ -40,7 +40,7 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         isAdmin:user.isAdmin,
-        token: generateToken(user._id),
+        token: generateToken(user._id,user.isAdmin),
       });
     } else {
       res.status(401).json({ message: "Invalid email or password" });

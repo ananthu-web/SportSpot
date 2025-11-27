@@ -1,13 +1,14 @@
 import { createContext, useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  console.log("context user",user);
-  
+  console.log("context user", user);
 
   // Load user from localStorage on page refresh
   useEffect(() => {
@@ -28,6 +29,7 @@ export function UserProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    navigate("/");
   };
 
   return (
