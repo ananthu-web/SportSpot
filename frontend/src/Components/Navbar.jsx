@@ -73,7 +73,7 @@ function NavigationBar() {
 
 {Boolean(user?.isAdmin) ? (
   <Nav.Link as={Link} to="/ownerpage" className="nav-item">
-    Court Details
+    Add Courts
   </Nav.Link>
 ) : (
   <Nav.Link className="nav-item" onClick={() => { scrollToSection("contact"); setExpanded(false); }}>
@@ -101,6 +101,9 @@ function NavigationBar() {
               >
                 <NavDropdown.Item as={Link} to="/profile">
                   Profile
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/profile">
+                  Court Details
                 </NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/settings">
                   Settings

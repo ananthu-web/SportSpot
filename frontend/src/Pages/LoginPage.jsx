@@ -23,6 +23,7 @@ function LoginPage() {
         name: response.data.name,
         email: response.data.email,
         token: response.data.token,
+        isAdmin:response.data.isAdmin,
       });
 
       navigate("/"); // redirect on success

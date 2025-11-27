@@ -8,6 +8,8 @@ import { seedBannerData } from "./Controller/BannerDataController.js";
 import dataRoutes from "./Router/SportsRoutes.js"
 import { seedCourtData } from "./Controller/CourtDataController.js";
 import courtroutes  from "./Router/CourtRoutes.js"
+import addcourtRoutes from "./Router/AddcourtRoutes.js"
+
 
 Dotenv.config()
 
@@ -21,6 +23,7 @@ app.use("/images", express.static("Public/Images"));
 app.use("/api/auth", authRoutes);
 app.use("/api/data",dataRoutes)
 app.use("/api/courts",courtroutes)
+app.use("/api/admin",addcourtRoutes)
 
 
 app.get("/",(req,res)=>{

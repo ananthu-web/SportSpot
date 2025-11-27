@@ -51,7 +51,7 @@ function OwnerPage() {
     setError("");
     try {
       const payload = { ...court, owner: { name: user.name, email: user.email, phone: user.phone } };
-      await API.post("/api/courts", payload);
+      await API.post("/api/admin/addcourts", payload);
       alert("Court added successfully!");
       setCourt({
         name: "", sportType: "", location: "", latitude: "", longitude: "", map: "",
