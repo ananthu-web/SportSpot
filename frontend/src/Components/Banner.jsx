@@ -55,7 +55,7 @@ export default function Banner() {
         <Button
           as={Link} // <-- render as Link
           to="/sports"
-          className="book-btn"
+          className="book-btn-banner"
           style={{
             backgroundColor: "#ffc107", // yellow
             border: "none",

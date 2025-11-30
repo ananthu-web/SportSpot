@@ -78,7 +78,7 @@
 
 
 
-.book-btn {
+.book-btn-banner{
   background-color: #ffc107 !important; /* yellow */
   border: none; /* remove default border */
   color: #000 !important;
@@ -92,13 +92,13 @@
   outline: none; /* remove focus outline */
 }
 
-.book-btn:focus,
-.book-btn:active {
+.book-btn-banner:focus,
+.book-btn-banner:active {
   outline: none !important;
   box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
 }
 
-.book-btn:hover {
+.book-btn-banner:hover {
   box-shadow: 0 0 20px 6px rgba(255, 193, 7, 0.8);
   transform: scale(1.05);
   color: #000 !important;

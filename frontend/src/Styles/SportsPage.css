@@ -1,9 +1,9 @@
 /* SportsPage.css */
 .sports-page {
-  background: radial-gradient(circle at top, #0a0a0a, #111); /* dark gradient */
+  background: radial-gradient(circle at top, #0a0a0a, #111);
   color: #fff;
   min-height: 100vh;
-  padding: 100px 20px 60px; /* top padding to avoid navbar overlap */
+  padding: 100px 20px 60px;
   font-family: 'Poppins', sans-serif;
 }
 
@@ -37,6 +37,11 @@
   overflow: hidden;
   width: 280px;
   transition: transform 0.4s, box-shadow 0.4s;
+
+  /* ADDED → does NOT change layout */
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .sport-card:hover {
@@ -52,6 +57,10 @@
 
 .sport-info {
   padding: 20px;
+
+  /* ADDED → creates space for button without changing design */
+  flex: 1;
+  padding-bottom: 60px;
 }
 
 .sport-info h2 {
@@ -66,6 +75,7 @@
   margin-bottom: 15px;
 }
 
+/* BUTTON FIXED AT BOTTOM WITHOUT CHANGING ITS SIZE */
 .book-btn {
   background: linear-gradient(45deg, #ffd700, #ffab00);
   border: none;
@@ -76,9 +86,19 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
+  animation: pulse 2.5s infinite;
+  outline: none;
+
+  /* ADDED — safe bottom fix */
+  position: absolute;
+  bottom: 15px;
+  left: 7%;
+  transform: translateX(-50%);
+
+  width: auto; /* ensures button size stays EXACT same */
 }
 
 .book-btn:hover {
-  transform: scale(1.05);
+  transform: translateX(-50%) scale(1.05);
   box-shadow: 0 0 10px #ffd700;
 }

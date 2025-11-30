@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Button } from "react-bootstrap";
 import "../Styles/Navbar.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../UserContext";
@@ -45,81 +45,95 @@ function NavigationBar() {
           <span className="text-light">Spot</span>
         </Navbar.Brand>
 
-        {/* CENTER: Nav Links */}
-        <Nav className="nav-links d-flex justify-content-center flex-grow-1">
-          <Nav.Link
-            as={Link}
-            to="/"
-            className="nav-item"
-            onClick={() => {
-              scrollToSection("home");
-              setExpanded(false);
-            }}
-          >
-            Home
-          </Nav.Link>
-          <Nav.Link
-            className="nav-item"
-            onClick={() => {
-              scrollToSection("about");
-              setExpanded(false);
-            }}
-          >
-            About
-          </Nav.Link>
-          <Nav.Link as={Link} to="/sports" className="nav-item">
-            Sports
-          </Nav.Link>
+        {/* HAMBURGER TOGGLE BUTTON */}
+        <Navbar.Toggle 
+          aria-controls="basic-navbar-nav" 
+          className="border-0 text-light"
+        />
 
-{Boolean(user?.isAdmin) ? (
-  <Nav.Link as={Link} to="/ownerpage" className="nav-item">
-    Add Courts
-  </Nav.Link>
-) : (
-  <Nav.Link className="nav-item" onClick={() => { scrollToSection("contact"); setExpanded(false); }}>
-    Contact
-  </Nav.Link>
-)}
-        </Nav>
-
-        {/* RIGHT: User/Login */}
-        <div className="d-flex align-items-center gap-3 right-buttons">
-          {user ? (
-            <>
-              <div className="d-flex align-items-center">
-                <i className="bi bi-person-circle text-light fs-4 me-2"></i>
-                <span className="text-light fw-semibold">Hi, {user.name}</span>
-              </div>
-              <button onClick={logout} className="custom-btn btn-logout">
-                Logout
-              </button>
-              <NavDropdown
-                title="⋮"
-                id="user-dropdown"
-                align="end"
-                menuVariant="dark"
+        {/* COLLAPSE: Nav Links + Right buttons */}
+        <Navbar.Collapse id="basic-navbar-nav">
+          {/* CENTER: Nav Links */}
+          <Nav className="nav-links d-flex justify-content-center flex-grow-1">
+            <Nav.Link
+              as={Link}
+              to="/"
+              className="nav-item"
+              onClick={() => {
+                scrollToSection("home");
+                setExpanded(false);
+              }}
+            >
+              Home
+            </Nav.Link>
+            <Nav.Link
+              className="nav-item"
+              onClick={() => {
+                scrollToSection("about");
+                setExpanded(false);
+              }}
+            >
+              About
+            </Nav.Link>
+            <Nav.Link as={Link} to="/sports" className="nav-item">
+              Sports
+            </Nav.Link>
+            {Boolean(user?.isAdmin) ? (
+              <Nav.Link as={Link} to="/ownerpage" className="nav-item">
+                Add Courts
+              </Nav.Link>
+            ) : (
+              <Nav.Link
+                className="nav-item"
+                onClick={() => {
+                  scrollToSection("contact");
+                  setExpanded(false);
+                }}
               >
-                <NavDropdown.Item as={Link} to="/profile">
-                  Profile
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/profile">
-                  Court Details
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/settings">
-                  Settings
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/help">
-                  Help & Support
-                </NavDropdown.Item>
-              </NavDropdown>
-            </>
-          ) : (
-            <Link to="/login" className="custom-btn btn-login">
-              Signin
-            </Link>
-          )}
-        </div>
+                Contact
+              </Nav.Link>
+            )}
+          </Nav>
+
+          {/* RIGHT: User/Login */}
+          <div className="d-flex align-items-center gap-3 navbar-right mt-3 mt-lg-0 flex-column flex-lg-row">
+            {user ? (
+              <>
+                <div className="d-flex align-items-center">
+                  <i className="bi bi-person-circle text-light fs-4 me-2"></i>
+                  <span className="text-light fw-semibold">Hi, {user.name}</span>
+                </div>
+                <button onClick={logout} className="custom-btn btn-logout">
+                  Logout
+                </button>
+                <NavDropdown
+                  title="⋮"
+                  id="user-dropdown"
+                  align="end"
+                  menuVariant="dark"
+                >
+                  <NavDropdown.Item as={Link} to="/profile">
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/profile">
+                    Court Details
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/settings">
+                    Settings
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={Link} to="/help">
+                    Help & Support
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </>
+            ) : (
+              <Link to="/login" className="custom-btn btn-login">
+                Signin
+              </Link>
+            )}
+          </div>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );

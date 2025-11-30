@@ -12,7 +12,7 @@ const SportsData = [
   {
     name: "Tennis",
     image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.VcV3wPb8utFpwWO_6b20ewHaE7%3Fcb%3Ducfimgc2%26pid%3DApi&f=1&ipt=c985dd0cfd1a6963a462ade82b882b2a77cecd2e3edd89008e872719eb14b749&ipo=images",
-    description: "Book tennis courts for singles or doubles matches with ease.",
+    description: "Book tennis courts for singles or doubles matches with ease. ",
   },
   {
     name: "Cricket",
