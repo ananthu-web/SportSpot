@@ -1,5 +1,6 @@
 import User from "../Models/User.js"
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 
 // Generate JWT
@@ -70,25 +71,11 @@ export const  updateProfile = async (req,res)=>{
       state,
       country,
       postalCode,
-      currentPassword,
-      newPassword,
     } = req.body;
 
     // 2️⃣ Find logged-in user (from authMiddleware)
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
-
-    // 3️⃣ Handle password change (optional)
-    if (newPassword) {
-      if (!currentPassword)
-        return res.status(400).json({ message: "Current password is required" });
-
-      const isMatch = await bcrypt.compare(currentPassword, user.password);
-      if (!isMatch)
-        return res.status(400).json({ message: "Current password is incorrect" });
-
-      user.password = newPassword; // hashed automatically by schema pre-save
-    }
 
      // 4️⃣ Update profile fields
     user.name = name || user.name;
@@ -103,6 +90,8 @@ export const  updateProfile = async (req,res)=>{
     // 5️⃣ Save updated user to MongoDB
     await user.save();
 
+    const token=generateToken(user._id,user.isAdmin)
+
      // 6️⃣ Return updated user to frontend
     res.json({
       message: "Profile updated successfully",
@@ -116,6 +105,8 @@ export const  updateProfile = async (req,res)=>{
         state: user.state,
         country: user.country,
         postalCode: user.postalCode,
+        isAdmin:user.isAdmin,
+        token
       },
     });
 
@@ -125,6 +116,33 @@ export const  updateProfile = async (req,res)=>{
     console.error(err);
     res.status(500).json({ message: "Profile update  error" });
   }
+  
 };
+
+
+export const updatePassword=async(req,res)=>{
+
+  try{
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword)
+      return res.status(400).json({ message: "All fields are required" });
+
+     const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+     const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch)
+      return res.status(400).json({ message: "Current password is incorrect" });
+
+    user.password = newPassword; // hashed automatically by schema pre-save
+    await user.save();
+
+    res.json({ message: "Password changed successfully" });
+  }catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Password change error" });
+  }
+
+}
 
 

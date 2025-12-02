@@ -5,6 +5,8 @@ import API from "../API";
 
 function ProfilePage() {
   const { user, updateUser } = useContext(UserContext);
+
+  // Profile state
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -14,15 +16,32 @@ function ProfilePage() {
     state: "",
     country: "",
     postalCode: "",
+  });
+
+  // Password state
+  const [passwords, setPasswords] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
-  const [editing, setEditing] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editingPassword, setEditingPassword] = useState(false);
 
+  // Messages
+  const [profileError, setProfileError] = useState("");
+  const [profileSuccess, setProfileSuccess] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState("");
+
+  // Auto-remove message
+  const autoClear = (setter) => {
+    setTimeout(() => {
+      setter("");
+    }, 5000); // 5 seconds
+  };
+
+  // Load user into fields
   useEffect(() => {
     if (user) {
       setProfile({
@@ -34,74 +53,84 @@ function ProfilePage() {
         state: user.state || "",
         country: user.country || "",
         postalCode: user.postalCode || "",
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
       });
     }
   }, [user]);
 
-  const handleChange = (e) => {
+  // Profile input
+  const handleProfileChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
-    setError("");
-    setSuccess("");
+    setProfileError("");
+    setProfileSuccess("");
   };
 
-  const handleEdit = () => {
-    setEditing(true);
-    setSuccess("");
-    setError("");
+  // Password input
+  const handlePasswordChange = (e) => {
+    setPasswords({ ...passwords, [e.target.name]: e.target.value });
+    setPasswordError("");
+    setPasswordSuccess("");
   };
 
-  const handleSave =async () => {
-    // Basic profile validation
+  // Save profile
+  const handleProfileSave = async () => {
     if (!profile.name || !profile.email) {
-      setError("Name and Email are required");
+      setProfileError("Name and Email are required");
+      autoClear(setProfileError);
       return;
     }
 
-    // Password validation
-    if (profile.newPassword || profile.confirmPassword) {
-      if (!profile.currentPassword) {
-        setError("Please enter your current password");
-        return;
-      }
-      if (profile.newPassword !== profile.confirmPassword) {
-        setError("New passwords do not match");
-        return;
-      }
-      if (profile.newPassword.length < 6) {
-        setError("New password must be at least 6 characters");
-        return;
-      }
+    try {
+      const response = await API.put(
+        "/api/user/update-profile",
+        profile,
+        { headers: { Authorization: `Bearer ${user.token}` } }
+      );
+
+      updateUser(response.data.user);
+      setProfileSuccess("Profile updated successfully!");
+      autoClear(setProfileSuccess);
+      setEditingProfile(false);
+    } catch (err) {
+      setProfileError(err.response?.data?.message || "Profile update failed");
+      autoClear(setProfileError);
     }
-    try{
-      const response = await API.put("/api/admin/addcourts",
-        profile,{
-          headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-        }
-      )
-       // Update user context / call API
-    updateUser(response.data);
+  };
 
-    // Clear password fields after saving
-    setProfile((prev) => ({
-      ...prev,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    }));
-
-    setSuccess("Profile updated successfully!");
-    setEditing(false);
-
-    }catch(err){
-      setError(err.response?.data?.message || "Profile updation failed");
-
+  // Save password
+  const handlePasswordSave = async () => {
+    if (!passwords.currentPassword || !passwords.newPassword || !passwords.confirmPassword) {
+      setPasswordError("Please fill all password fields");
+      autoClear(setPasswordError);
+      return;
     }
 
+    if (passwords.newPassword !== passwords.confirmPassword) {
+      setPasswordError("New passwords do not match");
+      autoClear(setPasswordError);
+      return;
+    }
+
+    if (passwords.newPassword.length < 6) {
+      setPasswordError("New password must be at least 6 characters");
+      autoClear(setPasswordError);
+      return;
+    }
+
+    try {
+      await API.put(
+        "/api/user/update-password",
+        passwords,
+        { headers: { Authorization: `Bearer ${user.token}` } }
+      );
+
+      setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setPasswordSuccess("Password changed successfully!");
+      autoClear(setPasswordSuccess);
+      setEditingPassword(false);
+    } catch (err) {
+      setPasswordError(err.response?.data?.message || "Password change failed");
+      autoClear(setPasswordError);
+    }
   };
 
   return (
@@ -112,61 +141,97 @@ function ProfilePage() {
           <span className="profile-text">Profile</span>
         </h2>
 
-        <div className={`profile-grid ${editing ? "editing" : ""}`}>
-          {/* Profile fields */}
-          {["name", "email", "phone", "address", "city", "state", "country", "postalCode"].map(
-            (field) => (
-              <input
-                key={field}
-                name={field}
-                placeholder={field
-                  .replace(/([A-Z])/g, " $1")
-                  .replace(/^./, (str) => str.toUpperCase())}
-                value={profile[field]}
-                onChange={handleChange}
-                readOnly={!editing}
-              />
-            )
-          )}
-
-          {/* Password fields always visible */}
-          <input
-            type="password"
-            name="currentPassword"
-            placeholder="Current Password"
-            value={profile.currentPassword}
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            name="newPassword"
-            placeholder="New Password"
-            value={profile.newPassword}
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm New Password"
-            value={profile.confirmPassword}
-            onChange={handleChange}
-          />
+        {/* Profile Section */}
+        <div className={`profile-grid ${editingProfile ? "editing" : ""}`}>
+          {[
+            "name",
+            "email",
+            "phone",
+            "address",
+            "city",
+            "state",
+            "country",
+            "postalCode",
+          ].map((field) => (
+            <input
+              key={field}
+              name={field}
+              placeholder={
+                field.charAt(0).toUpperCase() +
+                field.slice(1).replace(/([A-Z])/g, " $1")
+              }
+              value={profile[field]}
+              onChange={handleProfileChange}
+              readOnly={!editingProfile}
+            />
+          ))}
         </div>
 
         <div className="profile-btn-container">
-          {!editing ? (
-            <button className="profile-btn" onClick={handleEdit}>
+          {!editingProfile ? (
+            <button className="profile-btn" onClick={() => setEditingProfile(true)}>
               Edit Profile
             </button>
           ) : (
-            <button className="profile-btn" onClick={handleSave}>
+            <button className="profile-btn" onClick={handleProfileSave}>
               Save Changes
             </button>
           )}
         </div>
 
-        {error && <p className="profile-error">{error}</p>}
-        {success && <p className="profile-success">{success}</p>}
+        {/* Profile Messages */}
+        {profileError && <p className="profile-error fade-out">{profileError}</p>}
+        {profileSuccess && <p className="profile-success fade-out">{profileSuccess}</p>}
+
+        {/* Password Section */}
+        <div className="password-section">
+          <h3>
+            <span className="text-warning">Change</span> Password
+          </h3>
+
+          <div className={`password-grid ${editingPassword ? "editing" : ""}`}>
+            <input
+              type="password"
+              name="currentPassword"
+              placeholder="Current Password"
+              value={passwords.currentPassword}
+              onChange={handlePasswordChange}
+              readOnly={!editingPassword}
+            />
+            <input
+              type="password"
+              name="newPassword"
+              placeholder="New Password"
+              value={passwords.newPassword}
+              onChange={handlePasswordChange}
+              readOnly={!editingPassword}
+            />
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm New Password"
+              value={passwords.confirmPassword}
+              onChange={handlePasswordChange}
+              readOnly={!editingPassword}
+            />
+          </div>
+
+          <div className="password-btn-container">
+            {!editingPassword ? (
+              <button className="password-btn" onClick={() => setEditingPassword(true)}>
+                Change Password
+              </button>
+            ) : (
+              <button className="password-btn" onClick={handlePasswordSave}>
+                Save Password
+              </button>
+            )}
+          </div>
+
+          {/* Password Messages */}
+          {passwordError && <p className="password-error fade-out">{passwordError}</p>}
+          {passwordSuccess && <p className="password-success fade-out">{passwordSuccess}</p>}
+        </div>
       </div>
     </div>
   );

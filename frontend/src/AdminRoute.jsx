@@ -8,7 +8,7 @@ export default function AdminRoute({ children }) {
 
   if (loading) return null; // Wait for context to load
 
-  if (!user) return <Navigate to="/login" replace />; // Not logged in
+  //if (!user) return <Navigate to="/login" replace />; // Not logged in
 
   if (!user.isAdmin) return <Navigate to="/" replace />; // Not admin
 
