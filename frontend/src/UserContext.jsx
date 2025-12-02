@@ -25,6 +25,13 @@ export function UserProvider({ children }) {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
+  // Update user data (used in ProfilePage after update)
+  const updateUser = (updatedData) => {
+    const newUser = { ...user, ...updatedData };
+    setUser(newUser);
+    localStorage.setItem("user", JSON.stringify(newUser));
+  };
+
   // Clear user from everywhere
   const logout = () => {
     setUser(null);
@@ -33,7 +40,7 @@ export function UserProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout, loading }}>
+    <UserContext.Provider value={{ user, login, logout,updateUser, loading }}>
       {children}
     </UserContext.Provider>
   );

@@ -187,3 +187,26 @@
   transform: scale(1.03); /* zoom slightly */
   box-shadow: 0 12px 25px rgba(0,0,0,0.35); /* optional shadow for depth */
 }
+
+
+
+.confirmWrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.confirmBtn {
+  padding: 12px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirmBtn:hover {
+  opacity: 0.9;
+}

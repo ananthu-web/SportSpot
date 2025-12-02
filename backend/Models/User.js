@@ -6,7 +6,13 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profilePic: { type: String, default: "" },
-  isAdmin:{type:Boolean,default:false},
+  phone: { type: String, default: "" },
+  address: { type: String, default: "" },
+  city: { type: String, default: "" },
+  state: { type: String, default: "" },
+  country: { type: String, default: "" },
+  postalCode: { type: String, default: "" },
+  isAdmin: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 

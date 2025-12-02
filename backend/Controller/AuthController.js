@@ -47,7 +47,6 @@ export const login = async (req, res) => {
         isAdmin:user.isAdmin,
         token,
       });
-      console.log(token);
       
     } else {
       res.status(401).json({ message: "Invalid email or password" });
@@ -56,4 +55,76 @@ export const login = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+// update profile
+
+export const  updateProfile = async (req,res)=>{
+  try{
+      const {
+      name,
+      email,
+      phone,
+      address,
+      city,
+      state,
+      country,
+      postalCode,
+      currentPassword,
+      newPassword,
+    } = req.body;
+
+    // 2️⃣ Find logged-in user (from authMiddleware)
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // 3️⃣ Handle password change (optional)
+    if (newPassword) {
+      if (!currentPassword)
+        return res.status(400).json({ message: "Current password is required" });
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch)
+        return res.status(400).json({ message: "Current password is incorrect" });
+
+      user.password = newPassword; // hashed automatically by schema pre-save
+    }
+
+     // 4️⃣ Update profile fields
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.address = address || user.address;
+    user.city = city || user.city;
+    user.state = state || user.state;
+    user.country = country || user.country;
+    user.postalCode = postalCode || user.postalCode;
+
+    // 5️⃣ Save updated user to MongoDB
+    await user.save();
+
+     // 6️⃣ Return updated user to frontend
+    res.json({
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        city: user.city,
+        state: user.state,
+        country: user.country,
+        postalCode: user.postalCode,
+      },
+    });
+
+  }
+  
+  catch(err) {
+    console.error(err);
+    res.status(500).json({ message: "Profile update  error" });
+  }
+};
+
 

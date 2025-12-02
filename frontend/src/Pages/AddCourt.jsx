@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext";
 import "../Styles/Auth.css"; // reuse auth styles
 import "../Styles/CourtForm.css"; // custom styles
 
-function OwnerPage() {
+function AddCourt() {
   const { user } = useContext(UserContext);
 
   const [court, setCourt] = useState({
@@ -148,4 +148,4 @@ function OwnerPage() {
   );
 }
 
-export default OwnerPage;
+export default AddCourt;

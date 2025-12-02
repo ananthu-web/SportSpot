@@ -1,12 +1,24 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import styles from "../Styles/CourtDetails.module.css";
 import { FaUser, FaRulerCombined, FaBasketballBall, FaLightbulb, FaMoneyBillWave, FaStar } from "react-icons/fa";
 
 function CourtDetails() {
   const location = useLocation();
+  const navigate=useNavigate()
   const { court, sport } = location.state || {};
+  const [selectedSlot, setSelectedSlot] = useState(null);
   if (!court) return <p>No court selected!</p>;
+
+  const handleSlotClick = (slot) => {
+  if (!slot.isBooked) setSelectedSlot(slot);
+};
+
+const handleConfirm = () => {
+    console.log("Confirmed slot:", selectedSlot);
+    navigate("/")
+    
+  };
 
   return (
     <div
@@ -33,7 +45,7 @@ function CourtDetails() {
       </div>
 
       {/* Slots */}
-      {court.slots?.length > 0 && (
+      {/* {court.slots?.length > 0 && (
         <div className={styles.courtSection}>
           <h2>Available Slots</h2>
           <div className={styles.horizontalScroll}>
@@ -47,7 +59,37 @@ function CourtDetails() {
             ))}
           </div>
         </div>
-      )}
+      )} */}
+
+      {court.slots?.length > 0 && (
+  <div className={styles.courtSection}>
+    <h2>Available Slots</h2>
+
+    <div className={styles.horizontalScroll}>
+      {court.slots.map((slot, idx) => (
+        <div
+          key={idx}
+          className={`${styles.slotCard} ${
+            slot.isBooked ? styles.booked : styles.available
+          }`}
+          onClick={() => !slot.isBooked && handleSlotClick(slot)}
+          style={{ cursor: slot.isBooked ? "not-allowed" : "pointer" }}
+        >
+          {slot.time}
+        </div>
+      ))}
+    </div>
+
+    {/* ⭐ Confirm button appears here, below the scroll */}
+    {selectedSlot && (
+      <div className={styles.confirmWrapper}>
+        <button className={styles.confirmBtn} onClick={handleConfirm}>
+          Confirm {selectedSlot.time}
+        </button>
+      </div>
+    )}
+  </div>
+)}
 
       {/* Amenities & Equipment */}
       <div className={styles.flexSection}>

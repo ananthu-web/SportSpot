@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../Styles/Auth.css"; 
+import "../Styles/Auth.css";
 import API from "../API";
 import { UserContext } from "../UserContext";
 
@@ -22,8 +22,15 @@ function LoginPage() {
       login({
         name: response.data.name,
         email: response.data.email,
+        id: response.data._id,
+        isAdmin: response.data.isAdmin,
         token: response.data.token,
-        isAdmin:response.data.isAdmin,
+        phone: response.data.phone || "",
+        address: response.data.address || "",
+        city: response.data.city || "",
+        state: response.data.state || "",
+        country: response.data.country || "",
+        postalCode: response.data.postalCode || "",
       });
 
       navigate("/"); // redirect on success
@@ -39,7 +46,9 @@ function LoginPage() {
           <span className="text-warning">Sport</span>
           <span className="text-light">Spot</span>
         </h2>
-        <p className="auth-subtitle">Login to book your favorite sports courts</p>
+        <p className="auth-subtitle">
+          Login to book your favorite sports courts
+        </p>
 
         <form onSubmit={handleLogin}>
           <input

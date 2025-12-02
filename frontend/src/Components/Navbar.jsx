@@ -25,7 +25,8 @@ function NavigationBar() {
       if (location.pathname !== "/") navigate(`/?scrollTo=${id}`);
       else {
         const element = document.getElementById(id);
-        if (element) element.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (element)
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
   };
@@ -46,8 +47,8 @@ function NavigationBar() {
         </Navbar.Brand>
 
         {/* HAMBURGER TOGGLE BUTTON */}
-        <Navbar.Toggle 
-          aria-controls="basic-navbar-nav" 
+        <Navbar.Toggle
+          aria-controls="basic-navbar-nav"
           className="border-0 text-light"
         />
 
@@ -79,7 +80,7 @@ function NavigationBar() {
               Sports
             </Nav.Link>
             {Boolean(user?.isAdmin) ? (
-              <Nav.Link as={Link} to="/ownerpage" className="nav-item">
+              <Nav.Link as={Link} to="/addcourt" className="nav-item">
                 Add Courts
               </Nav.Link>
             ) : (
@@ -101,31 +102,40 @@ function NavigationBar() {
               <>
                 <div className="d-flex align-items-center">
                   <i className="bi bi-person-circle text-light fs-4 me-2"></i>
-                  <span className="text-light fw-semibold">Hi, {user.name}</span>
+                  <span className="text-light fw-semibold">
+                    Hi, {user.name}
+                  </span>
                 </div>
                 <button onClick={logout} className="custom-btn btn-logout">
                   Logout
                 </button>
-                <NavDropdown
-                  title="⋮"
-                  id="user-dropdown"
-                  align="end"
-                  menuVariant="dark"
-                >
-                  <NavDropdown.Item as={Link} to="/profile">
-                    Profile
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/profile">
-                    Court Details
-                  </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/settings">
-                    Settings
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item as={Link} to="/help">
-                    Help & Support
-                  </NavDropdown.Item>
-                </NavDropdown>
+
+                {user && (
+                  <NavDropdown
+                    title="⋮"
+                    id="user-dropdown"
+                    align="end"
+                    menuVariant="dark"
+                  >
+                    <NavDropdown.Item as={Link} to="/profile">
+                      Profile
+                    </NavDropdown.Item>
+
+                    {user.isAdmin && (
+                      <NavDropdown.Item as={Link} to="/courtdetails">
+                        Court Details
+                      </NavDropdown.Item>
+                    )}
+
+                    <NavDropdown.Item as={Link} to="/settings">
+                      Settings
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item as={Link} to="/help">
+                      Help & Support
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                )}
               </>
             ) : (
               <Link to="/login" className="custom-btn btn-login">

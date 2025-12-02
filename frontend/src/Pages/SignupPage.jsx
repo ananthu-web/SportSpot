@@ -21,7 +21,6 @@ function SignupPage() {
         name,
         email,
         password,
-        
       });
 
       console.log("Signup success:", response.data);
@@ -35,6 +34,12 @@ function SignupPage() {
         id: response.data._id,
         isAdmin: response.data.isAdmin,
         token: response.data.token,
+        phone: response.data.phone || "",
+        address: response.data.address || "",
+        city: response.data.city || "",
+        state: response.data.state || "",
+        country: response.data.country || "",
+        postalCode: response.data.postalCode || "",
       });
 
       // Redirect to home/dashboard
@@ -52,7 +57,9 @@ function SignupPage() {
           <span className="text-warning">Sport</span>
           <span className="court-text">Spot</span>
         </h2>
-        <p className="auth-subtitle">Create your account to book sports courts</p>
+        <p className="auth-subtitle">
+          Create your account to book sports courts
+        </p>
 
         <form onSubmit={handleSignup}>
           <input
@@ -76,7 +83,6 @@ function SignupPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
 
           <button type="submit" className="auth-btn">
             Signup
