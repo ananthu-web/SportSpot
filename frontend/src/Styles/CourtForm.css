@@ -1,3 +1,6 @@
+/* ===================== Add Court Page Styles ===================== */
+
+/* Layout */
 .horizontal-layout {
   width: 950px;
   max-width: 98%;
@@ -30,14 +33,14 @@
   margin-top: 20px;
   margin-bottom: 8px;
   color: #ffd700;
-  text-align: center;   /* center the headings */
+  text-align: center;
 }
 
 /* Center aligned tag grid */
 .tag-grid {
   display: flex;
-  justify-content: center;   /* CENTER ALIGN */
-  flex-wrap: wrap;           /* avoid collapse */
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 10px 0;
   margin-bottom: 25px;
@@ -70,12 +73,12 @@
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
-  
 }
 
 /* Horizontal scroll containers */
 .horizontal-scroll {
   display: flex;
+  flex-wrap: nowrap;  /* prevent wrapping */
   overflow-x: auto;
   gap: 10px;
   padding: 5px 0 12px 0;
@@ -85,6 +88,7 @@
 .slot-card,
 .photo-card-wrapper {
   background: #222;
+  color: #ffd700;  /* text color for visibility */
   padding: 5px 10px;
   border-radius: 10px;
   border: 1px solid #ffd700;
@@ -108,7 +112,7 @@
 
 /* Title text colors */
 .auth-title {
-  margin-bottom: 25px; /* spacing between heading and form */
+  margin-bottom: 25px;
   text-align: center;
 }
 
@@ -122,16 +126,16 @@
   letter-spacing: 1px;
 }
 
-
+/* Buttons */
 .add-btn {
-  width: auto;  
-  height: 52px;              /* not full width */
-  padding: 2px 100px;          /* smaller than main button */
+  width: auto;
+  height: 52px;
+  padding: 2px 100px;
   border-radius: 50px;
   border: 2px solid #ffd700;
   background-color: transparent;
   color: #ffd700;
-  font-size: 0.95rem;         /* slightly smaller text */
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -144,9 +148,25 @@
   transform: translateY(-2px);
 }
 
+/* Messages */
+.fade {
+  animation: fadeOut 5s forwards;
+}
 
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
+.auth-error {
+  color: #ff4d4f;
+  text-align: center;
+  margin-top: 10px;
+}
 
-
-
-
+.auth-success {
+  color: #00ff99;
+  text-align: center;
+  margin-top: 10px;
+}

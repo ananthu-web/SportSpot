@@ -4,6 +4,6 @@ import { adminMiddleware, authMiddleware } from "../Middleware/auth.js"
 
 const router=express.Router()
 
-router.put("/addcourts",authMiddleware,adminMiddleware, AddCourt)
+router.post("/addcourts",authMiddleware,adminMiddleware, AddCourt)
 
 export default router

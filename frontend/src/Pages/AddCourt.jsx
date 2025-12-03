@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import API from "../API";
 import { UserContext } from "../UserContext";
-import "../Styles/Auth.css"; // reuse auth styles
-import "../Styles/CourtForm.css"; // custom styles
+import "../Styles/Auth.css";
+import "../Styles/CourtForm.css";
 
 function AddCourt() {
   const { user } = useContext(UserContext);
@@ -16,6 +16,7 @@ function AddCourt() {
   const [slotTime, setSlotTime] = useState("");
   const [photoURL, setPhotoURL] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => setCourt({ ...court, [e.target.name]: e.target.value });
 
@@ -49,10 +50,18 @@ function AddCourt() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     try {
       const payload = { ...court, owner: { name: user.name, email: user.email, phone: user.phone } };
-      await API.post("/api/admin/addcourts", payload);
-      alert("Court added successfully!");
+      await API.post("/api/admin/addcourts", payload,
+        {
+    headers: {
+      Authorization: `Bearer ${user.token}`   // attach the token
+    }
+  });
+      setSuccess("Court added successfully!");
+      setTimeout(() => setSuccess(""), 5000); // fade out after 5s
+
       setCourt({
         name: "", sportType: "", location: "", latitude: "", longitude: "", map: "",
         size: "", playerCount: "", courtType: "", bookingCharge: "", lighting: "",
@@ -60,17 +69,17 @@ function AddCourt() {
       });
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
+      setTimeout(() => setError(""), 5000); // fade out after 5s
     }
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card horizontal-layout">
-<h2 className="auth-title">
-  <span className="text-warning">Add</span> <span className="court-text">Court</span>
-</h2>
+        <h2 className="auth-title">
+          <span className="text-warning">Add</span> <span className="court-text">Court</span>
+        </h2>
         <form onSubmit={handleSubmit}>
-          {/* Court Info Inputs */}
           <div className="grid-container">
             {["name","sportType","location","latitude","longitude","map","size","playerCount","courtType","bookingCharge","lighting","maxBookingHours"].map((field) => (
               <input
@@ -79,11 +88,11 @@ function AddCourt() {
                 placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g," $1")}
                 value={court[field]}
                 onChange={handleChange}
+                required
               />
             ))}
           </div>
 
-          {/* Amenities */}
           <p className="section-title">Amenities:</p>
           <div className="tag-grid">
             {["Changing Rooms", "Parking", "Seating"].map((item) => (
@@ -97,7 +106,6 @@ function AddCourt() {
             ))}
           </div>
 
-          {/* Equipment */}
           <p className="section-title">Equipment:</p>
           <div className="tag-grid">
             {["Football", "Goals", "Corner Flags"].map((item) => (
@@ -111,7 +119,6 @@ function AddCourt() {
             ))}
           </div>
 
-          {/* Booking Slots */}
           <p className="section-title">Booking Slots:</p>
           <div className="horizontal-input">
             <input placeholder="06:00-07:00" value={slotTime} onChange={(e) => setSlotTime(e.target.value)} />
@@ -125,7 +132,6 @@ function AddCourt() {
             ))}
           </div>
 
-          {/* Photos */}
           <p className="section-title">Photos:</p>
           <div className="horizontal-input">
             <input placeholder="Photo URL" value={photoURL} onChange={(e) => setPhotoURL(e.target.value)} />
@@ -141,7 +147,10 @@ function AddCourt() {
           </div>
 
           <button type="submit" className="add-btn">Add Court</button>
-          {error && <p className="auth-error">{error}</p>}
+
+          {/* Messages */}
+          {error && <p className="auth-error fade">{error}</p>}
+          {success && <p className="auth-success fade">{success}</p>}
         </form>
       </div>
     </div>
