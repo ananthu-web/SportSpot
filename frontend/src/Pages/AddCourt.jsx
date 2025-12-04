@@ -8,17 +8,43 @@ function AddCourt() {
   const { user } = useContext(UserContext);
 
   const [court, setCourt] = useState({
-    name: "", sportType: "", location: "", latitude: "", longitude: "", map: "",
-    size: "", playerCount: "", courtType: "", bookingCharge: "", lighting: "",
-    photos: [], amenities: [], equipmentAvailable: [], slots: [], maxBookingHours: 2
+    name: "",
+    sportType: "",
+    location: "",
+    latitude: "",
+    longitude: "",
+    map: "",
+    size: "",
+    playerCount: "",
+    courtType: "",
+    bookingCharge: "",
+    lighting: "",
+    photos: [],
+    amenities: [],
+    equipmentAvailable: [],
+    slots: [],
+    maxBookingHours: 2,
   });
 
   const [slotTime, setSlotTime] = useState("");
   const [photoURL, setPhotoURL] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [equipmentInput, setEquipmentInput] = useState("");
 
-  const handleChange = (e) => setCourt({ ...court, [e.target.name]: e.target.value });
+  const addEquipment = () => {
+  if (equipmentInput && !court.equipmentAvailable.includes(equipmentInput)) {
+    setCourt({ ...court, equipmentAvailable: [...court.equipmentAvailable, equipmentInput] });
+    setEquipmentInput("");
+  }
+};
+
+const removeEquipment = (index) => {
+  setCourt({ ...court, equipmentAvailable: court.equipmentAvailable.filter((_, i) => i !== index) });
+};
+
+  const handleChange = (e) =>
+    setCourt({ ...court, [e.target.name]: e.target.value });
 
   const handleMultiSelect = (field, value) => {
     const arr = court[field];
@@ -31,12 +57,16 @@ function AddCourt() {
 
   const addSlot = () => {
     if (slotTime) {
-      setCourt({ ...court, slots: [...court.slots, { time: slotTime, isBooked: false }] });
+      setCourt({
+        ...court,
+        slots: [...court.slots, { time: slotTime, isBooked: false }],
+      });
       setSlotTime("");
     }
   };
 
-  const removeSlot = (index) => setCourt({ ...court, slots: court.slots.filter((_, i) => i !== index) });
+  const removeSlot = (index) =>
+    setCourt({ ...court, slots: court.slots.filter((_, i) => i !== index) });
 
   const addPhoto = () => {
     if (photoURL) {
@@ -45,27 +75,50 @@ function AddCourt() {
     }
   };
 
-  const removePhoto = (index) => setCourt({ ...court, photos: court.photos.filter((_, i) => i !== index) });
+  const removePhoto = (index) =>
+    setCourt({ ...court, photos: court.photos.filter((_, i) => i !== index) });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     try {
-      const payload = { ...court, owner: { name: user.name, email: user.email, phone: user.phone } };
-      await API.post("/api/admin/addcourts", payload,
-        {
-    headers: {
-      Authorization: `Bearer ${user.token}`   // attach the token
-    }
-  });
+      // generate map URL from latitude and longitude
+      const mapUrl = `https://www.google.com/maps?q=${court.latitude},${court.longitude}&output=embed`;
+
+      // include mapUrl in payload
+      const payload = {
+        ...court,
+        map: mapUrl,
+        // owner: { name: user.name, email: user.email, phone: user.phone },
+        owner:user._id,
+      };
+
+      await API.post("/api/admin/addcourts", payload, {
+        headers: {
+          Authorization: `Bearer ${user.token}`, // attach the token
+        },
+      });
       setSuccess("Court added successfully!");
       setTimeout(() => setSuccess(""), 5000); // fade out after 5s
 
       setCourt({
-        name: "", sportType: "", location: "", latitude: "", longitude: "", map: "",
-        size: "", playerCount: "", courtType: "", bookingCharge: "", lighting: "",
-        photos: [], amenities: [], equipmentAvailable: [], slots: [], maxBookingHours: 2
+        name: "",
+        sportType: "",
+        location: "",
+        latitude: "",
+        longitude: "",
+        map: "",
+        size: "",
+        playerCount: "",
+        courtType: "",
+        bookingCharge: "",
+        lighting: "",
+        photos: [],
+        amenities: [],
+        equipmentAvailable: [],
+        slots: [],
+        maxBookingHours: 2,
       });
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
@@ -77,15 +130,31 @@ function AddCourt() {
     <div className="auth-page">
       <div className="auth-card horizontal-layout">
         <h2 className="auth-title">
-          <span className="text-warning">Add</span> <span className="court-text">Court</span>
+          <span className="text-warning">Add</span>{" "}
+          <span className="court-text">Court</span>
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="grid-container">
-            {["name","sportType","location","latitude","longitude","map","size","playerCount","courtType","bookingCharge","lighting","maxBookingHours"].map((field) => (
+            {[
+              "name",
+              "sportType",
+              "location",
+              "latitude",
+              "longitude",
+              "size",
+              "playerCount",
+              "courtType",
+              "bookingCharge",
+              "lighting",
+              "maxBookingHours",
+            ].map((field) => (
               <input
                 key={field}
                 name={field}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g," $1")}
+                placeholder={
+                  field.charAt(0).toUpperCase() +
+                  field.slice(1).replace(/([A-Z])/g, " $1")
+                }
                 value={court[field]}
                 onChange={handleChange}
                 required
@@ -98,7 +167,9 @@ function AddCourt() {
             {["Changing Rooms", "Parking", "Seating"].map((item) => (
               <div
                 key={item}
-                className={`tag-card ${court.amenities.includes(item) ? "selected" : ""}`}
+                className={`tag-card ${
+                  court.amenities.includes(item) ? "selected" : ""
+                }`}
                 onClick={() => handleMultiSelect("amenities", item)}
               >
                 {item}
@@ -106,7 +177,7 @@ function AddCourt() {
             ))}
           </div>
 
-          <p className="section-title">Equipment:</p>
+          {/* <p className="section-title">Equipment:</p>
           <div className="tag-grid">
             {["Football", "Goals", "Corner Flags"].map((item) => (
               <div
@@ -117,36 +188,82 @@ function AddCourt() {
                 {item}
               </div>
             ))}
+          </div> */}
+          <p className="section-title">Equipment:</p>
+          <div className="horizontal-input">
+            <input
+              placeholder="Type equipment"
+              value={equipmentInput}
+              onChange={(e) => setEquipmentInput(e.target.value)}
+            />
+            <button type="button" className="add-btn" onClick={addEquipment}>
+              Add
+            </button>
           </div>
+
+          <div className="horizontal-scroll">
+            {court.equipmentAvailable.map((item, idx) => (
+              <div key={idx} className="tag-card">
+                {item}{" "}
+                <span
+                  className="remove-btn"
+                  onClick={() => removeEquipment(idx)}
+                >
+                  ×
+                </span>
+              </div>
+            ))}
+          </div>
+
+
 
           <p className="section-title">Booking Slots:</p>
           <div className="horizontal-input">
-            <input placeholder="06:00-07:00" value={slotTime} onChange={(e) => setSlotTime(e.target.value)} />
-            <button type="button" onClick={addSlot} className="add-btn">Add</button>
+            <input
+              placeholder="06:00-07:00"
+              value={slotTime}
+              onChange={(e) => setSlotTime(e.target.value)}
+            />
+            <button type="button" onClick={addSlot} className="add-btn">
+              Add
+            </button>
           </div>
           <div className="horizontal-scroll">
             {court.slots.map((slot, idx) => (
               <div key={idx} className="slot-card">
-                {slot.time} <span className="remove-btn" onClick={() => removeSlot(idx)}>×</span>
+                {slot.time}{" "}
+                <span className="remove-btn" onClick={() => removeSlot(idx)}>
+                  ×
+                </span>
               </div>
             ))}
           </div>
 
           <p className="section-title">Photos:</p>
           <div className="horizontal-input">
-            <input placeholder="Photo URL" value={photoURL} onChange={(e) => setPhotoURL(e.target.value)} />
-            <button type="button" onClick={addPhoto} className="add-btn">Add</button>
+            <input
+              placeholder="Photo URL"
+              value={photoURL}
+              onChange={(e) => setPhotoURL(e.target.value)}
+            />
+            <button type="button" onClick={addPhoto} className="add-btn">
+              Add
+            </button>
           </div>
           <div className="horizontal-scroll">
             {court.photos.map((photo, idx) => (
               <div key={idx} className="photo-card-wrapper">
                 <img src={photo} alt={`court-${idx}`} className="photo-card" />
-                <span className="remove-btn" onClick={() => removePhoto(idx)}>×</span>
+                <span className="remove-btn" onClick={() => removePhoto(idx)}>
+                  ×
+                </span>
               </div>
             ))}
           </div>
 
-          <button type="submit" className="add-btn">Add Court</button>
+          <button type="submit" className="add-btn">
+            Add Court
+          </button>
 
           {/* Messages */}
           {error && <p className="auth-error fade">{error}</p>}
