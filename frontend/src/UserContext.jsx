@@ -10,6 +10,8 @@ export function UserProvider({ children }) {
 
   console.log("context user", user);
 
+  
+
   // Load user from localStorage on page refresh
   useEffect(() => {
     const storedUser = localStorage.getItem("user");

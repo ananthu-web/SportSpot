@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Container } from "react-bootstrap";
 import "../Styles/Banner.css";
 import { Link, Navigate } from "react-router-dom";
-import axios from "axios"
+import API from "../API";
 
 
 export default function Banner() {
@@ -13,7 +13,7 @@ export default function Banner() {
   useEffect( ()=>{
     const loadbanner=async()=>{
       try{
-        const res = await axios.get("http://localhost:3000/api/data/banner")
+        const res = await API.get("/api/data/banner")
         const urls = res.data.map((item)=>item.image)
         setImages(urls)
 
