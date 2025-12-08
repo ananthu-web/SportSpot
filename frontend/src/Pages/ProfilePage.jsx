@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
 import "../Styles/ProfilePage.css";
+import { Link } from "react-router-dom";
 import API from "../API";
 
 function ProfilePage() {
@@ -33,6 +34,10 @@ function ProfilePage() {
   const [profileSuccess, setProfileSuccess] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
+
+  // admin Courts
+  const [adminCourts, setAdminCourts] = useState([]); // to store courts added by admin
+  const [courtError, setCourtError] = useState(""); // to show fetch/delete errors
 
   // Auto-remove message
   const autoClear = (setter) => {
@@ -80,11 +85,9 @@ function ProfilePage() {
     }
 
     try {
-      const response = await API.put(
-        "/api/user/update-profile",
-        profile,
-        { headers: { Authorization: `Bearer ${user.token}` } }
-      );
+      const response = await API.put("/api/user/update-profile", profile, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
 
       updateUser(response.data.user);
       setProfileSuccess("Profile updated successfully!");
@@ -98,7 +101,11 @@ function ProfilePage() {
 
   // Save password
   const handlePasswordSave = async () => {
-    if (!passwords.currentPassword || !passwords.newPassword || !passwords.confirmPassword) {
+    if (
+      !passwords.currentPassword ||
+      !passwords.newPassword ||
+      !passwords.confirmPassword
+    ) {
       setPasswordError("Please fill all password fields");
       autoClear(setPasswordError);
       return;
@@ -117,13 +124,15 @@ function ProfilePage() {
     }
 
     try {
-      await API.put(
-        "/api/user/update-password",
-        passwords,
-        { headers: { Authorization: `Bearer ${user.token}` } }
-      );
+      await API.put("/api/user/update-password", passwords, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
 
-      setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setPasswords({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
       setPasswordSuccess("Password changed successfully!");
       autoClear(setPasswordSuccess);
       setEditingPassword(false);
@@ -132,6 +141,47 @@ function ProfilePage() {
       autoClear(setPasswordError);
     }
   };
+
+  // admin courts
+
+  useEffect(() => {
+    const fetchAdminCourts = async () => {
+      try {
+        const response = await API.get("/api/admin/mycourts", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        setAdminCourts(response.data.courts); // save courts to state
+      } catch (err) {
+        setCourtError(err.response?.data?.message || "Failed to load courts");
+        setTimeout(() => setCourtError(""), 5000); // auto-clear
+      }
+    };
+
+    if (user?.isAdmin) {
+      fetchAdminCourts();
+    }
+  }, [user]);
+
+
+
+  // Delete court
+  const handleDeleteCourt = async (courtId) => {
+    if (!window.confirm("Are you sure you want to delete this court?")) return;
+
+    try {
+      await API.delete(`/api/admin/delete-court/${courtId}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      // Remove the deleted court from state
+      setAdminCourts(adminCourts.filter((court) => court._id !== courtId));
+    } catch (err) {
+      setCourtError(err.response?.data?.message || "Failed to delete court");
+      setTimeout(() => setCourtError(""), 5000);
+    }
+  };
+
+
 
   return (
     <div className="profile-page">
@@ -169,7 +219,10 @@ function ProfilePage() {
 
         <div className="profile-btn-container">
           {!editingProfile ? (
-            <button className="profile-btn" onClick={() => setEditingProfile(true)}>
+            <button
+              className="profile-btn"
+              onClick={() => setEditingProfile(true)}
+            >
               Edit Profile
             </button>
           ) : (
@@ -180,8 +233,12 @@ function ProfilePage() {
         </div>
 
         {/* Profile Messages */}
-        {profileError && <p className="profile-error fade-out">{profileError}</p>}
-        {profileSuccess && <p className="profile-success fade-out">{profileSuccess}</p>}
+        {profileError && (
+          <p className="profile-error fade-out">{profileError}</p>
+        )}
+        {profileSuccess && (
+          <p className="profile-success fade-out">{profileSuccess}</p>
+        )}
 
         {/* Password Section */}
         <div className="password-section">
@@ -218,7 +275,10 @@ function ProfilePage() {
 
           <div className="password-btn-container">
             {!editingPassword ? (
-              <button className="password-btn" onClick={() => setEditingPassword(true)}>
+              <button
+                className="password-btn"
+                onClick={() => setEditingPassword(true)}
+              >
                 Change Password
               </button>
             ) : (
@@ -229,9 +289,41 @@ function ProfilePage() {
           </div>
 
           {/* Password Messages */}
-          {passwordError && <p className="password-error fade-out">{passwordError}</p>}
-          {passwordSuccess && <p className="password-success fade-out">{passwordSuccess}</p>}
+          {passwordError && (
+            <p className="password-error fade-out">{passwordError}</p>
+          )}
+          {passwordSuccess && (
+            <p className="password-success fade-out">{passwordSuccess}</p>
+          )}
         </div>
+
+
+        {/* Admin Courts Section */}
+        {user?.isAdmin && (
+          <div className="admin-courts-section">
+            <h3 className="admin-courts-title">
+              <span className="text-warning">My</span> Courts
+            </h3>
+
+            {courtError && <p className="admin-courts-error">{courtError}</p>}
+
+            <ul className="admin-courts-list">
+              {adminCourts.map((court) => (
+                <li key={court._id} className="admin-court-item">
+                  <span className="court-name">{court.name}</span>
+                  <div className="court-actions">
+                    <Link to={`/edit-court/${court._id}`} className="edit-btn">
+                      Edit
+                    </Link>
+                    <button className="delete-btn" onClick={()=>handleDeleteCourt(court._id)}>Delete</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        
       </div>
     </div>
   );

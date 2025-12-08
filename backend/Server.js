@@ -10,6 +10,7 @@ import { seedCourtData } from "./Controller/CourtDataController.js";
 import courtroutes  from "./Router/CourtRoutes.js"
 import addcourtRoutes from "./Router/AddcourtRoutes.js"
 import useroutes from "./Router/UserRoutes.js"
+import adminroute from "./Router/AdminRoutes.js"
 
 Dotenv.config()
 
@@ -25,6 +26,7 @@ app.use("/api/data",dataRoutes)
 app.use("/api/courts",courtroutes)
 app.use("/api/admin",addcourtRoutes)
 app.use("/api/user",useroutes)
+app.use("/api/admin",adminroute)
 
 
 app.get("/",(req,res)=>{

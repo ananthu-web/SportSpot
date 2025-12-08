@@ -11,6 +11,7 @@ import CourtDetails from "./Pages/CourtDetails.jsx";
 import AddCourt from "./Pages/AddCourt.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import AdminRoute from "./AdminRoute.jsx";
+import EditCourt from "./Pages/EditCourt.jsx";
 
 function MainRouter() {
   return (
@@ -33,6 +34,12 @@ function MainRouter() {
           }
         />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/edit-court/:courtId"
+          element={
+              <EditCourt />
+          }
+        />
       </Routes>
     </>
   );

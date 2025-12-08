@@ -169,7 +169,99 @@
 
 
 
+/* ===================== Admin Courts Section ===================== */
+.admin-courts-section {
+  margin-top: 40px;
+  padding: 25px;
+  background-color: #111;
+  border: 1px solid #ffd700;
+  border-radius: 12px;
+}
 
+.admin-courts-title {
+  text-align: center;
+  color: #fff;
+  font-size: 1.6rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
 
+.admin-courts-error {
+  color: #ff4d4f;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.admin-courts-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-court-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: #222;
+  border-radius: 10px;
+  border: 1px solid #ffd700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-court-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.court-name {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.court-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #ffd700;
+  background: transparent;
+  color: #ffd700;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  background-color: #ffd700;
+  color: #000;
+  transform: scale(1.05);
+}
+
+/* ===================== Mobile Responsiveness ===================== */
+@media (max-width: 480px) {
+  .admin-court-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .court-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
 
 
