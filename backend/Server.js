@@ -14,7 +14,7 @@ import adminroute from "./Router/AdminRoutes.js"
 
 Dotenv.config()
 
-const app=express()
+const app=express(
 
 app.use(cors())
 app.use(express.json())
