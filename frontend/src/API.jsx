@@ -1,11 +1,17 @@
+// import axios from "axios";
+
+// const API = axios.create({
+//   baseURL: "http://localhost:3000", 
+// });
+
+
+// export default API;
+
+
 import axios from "axios";
 
-// Base URL for all API requests
 const API = axios.create({
-  baseURL: "http://localhost:3000", // replace with env variable in production
+  baseURL: process.env.REACT_APP_API_URL, // uses .env variable
 });
-
-
-
 
 export default API;
