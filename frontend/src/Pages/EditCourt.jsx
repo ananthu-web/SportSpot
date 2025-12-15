@@ -29,33 +29,108 @@ function EditCourt() {
   const [slotTime, setSlotTime] = useState("");
   const [photoURL, setPhotoURL] = useState("");
   const [equipmentInput, setEquipmentInput] = useState("");
-  const [admincourt, setAdmincourts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) =>
     setCourt({ ...court, [e.target.name]: e.target.value });
 
-  // ---------------- FETCH COURT DATA HERE ----------------
+  // ---------------- FETCH COURT DATA ----------------
   useEffect(() => {
-    if (!user) return; // wait for user to be loaded
+    if (!user) return;
 
     const fetchCourt = async () => {
-              console.log(courtId,user.token);
-
       try {
-        
-        const response = await API.get(`api/admin/court/${courtId}`, {
+        const response = await API.get(`/api/admin/court/${courtId}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setCourt(response.data.court);
         setLoading(false);
       } catch (err) {
-        console.log("Error fetching court:", err);
+        setError("Failed to load court");
+        setLoading(false);
       }
     };
 
     fetchCourt();
   }, [courtId, user]);
+
+  // ---------------- HANDLE FORM SUBMIT ----------------
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    try {
+      const mapUrl = `https://www.google.com/maps?q=${court.latitude},${court.longitude}&output=embed`;
+
+      const payload = {
+        ...court,
+        map: mapUrl,
+      };
+
+      await API.put(`/api/admin/updatecourt/${courtId}`, payload, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      setSuccess("Court updated successfully!");
+      setTimeout(() => setSuccess(""), 5000);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to update court");
+      setTimeout(() => setError(""), 5000);
+    }
+  };
+
+  // ---------------- AMENITIES ----------------
+  const handleAmenitySelect = (item) => {
+    const arr = court.amenities;
+    if (arr.includes(item)) {
+      setCourt({ ...court, amenities: arr.filter((i) => i !== item) });
+    } else {
+      setCourt({ ...court, amenities: [...arr, item] });
+    }
+  };
+
+  // ---------------- EQUIPMENT ----------------
+  const addEquipment = () => {
+    if (equipmentInput && !court.equipmentAvailable.includes(equipmentInput)) {
+      setCourt({ ...court, equipmentAvailable: [...court.equipmentAvailable, equipmentInput] });
+      setEquipmentInput("");
+    }
+  };
+
+  const removeEquipment = (index) => {
+    setCourt({ ...court, equipmentAvailable: court.equipmentAvailable.filter((_, i) => i !== index) });
+  };
+
+  // ---------------- SLOTS ----------------
+  const addSlot = () => {
+    if (slotTime) {
+      setCourt({
+        ...court,
+        slots: [...court.slots, { time: slotTime, isBooked: false }],
+      });
+      setSlotTime("");
+    }
+  };
+
+  const removeSlot = (index) => {
+    setCourt({ ...court, slots: court.slots.filter((_, i) => i !== index) });
+  };
+
+  // ---------------- PHOTOS ----------------
+  const addPhoto = () => {
+    if (photoURL) {
+      setCourt({ ...court, photos: [...court.photos, photoURL] });
+      setPhotoURL("");
+    }
+  };
+
+  const removePhoto = (index) => {
+    setCourt({ ...court, photos: court.photos.filter((_, i) => i !== index) });
+  };
 
   if (loading) return <p>Loading court data...</p>;
 
@@ -66,7 +141,7 @@ function EditCourt() {
           <span className="text-warning">Edit</span>{" "}
           <span className="court-text">Court</span>
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="grid-container">
             {[
               "name",
@@ -97,7 +172,11 @@ function EditCourt() {
           <p className="section-title">Amenities:</p>
           <div className="tag-grid">
             {["Changing Rooms", "Parking", "Seating"].map((item) => (
-              <div key={item} className="tag-card">
+              <div
+                key={item}
+                className={`tag-card ${court.amenities.includes(item) ? "selected" : ""}`}
+                onClick={() => handleAmenitySelect(item)}
+              >
                 {item}
               </div>
             ))}
@@ -110,39 +189,51 @@ function EditCourt() {
               value={equipmentInput}
               onChange={(e) => setEquipmentInput(e.target.value)}
             />
-            <button type="button" className="add-btn">
+            <button type="button" className="add-btn" onClick={addEquipment}>
               Add
             </button>
           </div>
-
           <div className="horizontal-scroll">
             {court.equipmentAvailable.map((item, idx) => (
               <div key={idx} className="tag-card">
-                {item}
+                {item}{" "}
+                <span className="remove-btn" onClick={() => removeEquipment(idx)}>
+                  ×
+                </span>
               </div>
             ))}
           </div>
 
           <p className="section-title">Booking Slots:</p>
           <div className="horizontal-input">
-            <input placeholder="06:00-07:00" value={slotTime} readOnly />
-            <button type="button" className="add-btn">
+            <input
+              placeholder="06:00-07:00"
+              value={slotTime}
+              onChange={(e) => setSlotTime(e.target.value)}
+            />
+            <button type="button" className="add-btn" onClick={addSlot}>
               Add
             </button>
           </div>
-
           <div className="horizontal-scroll">
             {court.slots.map((slot, idx) => (
               <div key={idx} className="slot-card">
-                {slot.time}
+                {slot.time}{" "}
+                <span className="remove-btn" onClick={() => removeSlot(idx)}>
+                  ×
+                </span>
               </div>
             ))}
           </div>
 
           <p className="section-title">Photos:</p>
           <div className="horizontal-input">
-            <input placeholder="Photo URL" value={photoURL} readOnly />
-            <button type="button" className="add-btn">
+            <input
+              placeholder="Photo URL"
+              value={photoURL}
+              onChange={(e) => setPhotoURL(e.target.value)}
+            />
+            <button type="button" className="add-btn" onClick={addPhoto}>
               Add
             </button>
           </div>
@@ -150,6 +241,7 @@ function EditCourt() {
             {court.photos.map((photo, idx) => (
               <div key={idx} className="photo-card-wrapper">
                 <img src={photo} alt={`court-${idx}`} className="photo-card" />
+                <span className="remove-btn" onClick={() => removePhoto(idx)}>×</span>
               </div>
             ))}
           </div>
@@ -157,6 +249,10 @@ function EditCourt() {
           <button type="submit" className="add-btn">
             Update Court
           </button>
+
+          {/* Messages */}
+          {error && <p className="auth-error fade">{error}</p>}
+          {success && <p className="auth-success fade">{success}</p>}
         </form>
       </div>
     </div>

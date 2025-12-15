@@ -91,7 +91,7 @@ const removeEquipment = (index) => {
         ...court,
         map: mapUrl,
         // owner: { name: user.name, email: user.email, phone: user.phone },
-        owner:user._id,
+        owner:user.id,
       };
 
       await API.post("/api/admin/addcourts", payload, {

@@ -121,15 +121,7 @@ function NavigationBar() {
                       Profile
                     </NavDropdown.Item>
 
-                    {user.isAdmin && (
-                      <NavDropdown.Item as={Link} to="/courtdetails">
-                        Court Details
-                      </NavDropdown.Item>
-                    )}
 
-                    <NavDropdown.Item as={Link} to="/settings">
-                      Settings
-                    </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item as={Link} to="/help">
                       Help & Support
