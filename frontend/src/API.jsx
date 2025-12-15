@@ -11,7 +11,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL, // uses .env variable
+  baseURL: "https://sportspot-u1t8.onrender.com",
 });
 
 export default API;
