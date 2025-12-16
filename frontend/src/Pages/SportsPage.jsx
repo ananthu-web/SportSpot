@@ -2,7 +2,7 @@ import "../Styles/SportsPage.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../UserContext";
-import axios from "axios";
+import API from "../API";
 
 function SportsPage() {
   const { user } = useContext(UserContext);
@@ -12,7 +12,7 @@ function SportsPage() {
   useEffect(() => {
     const loadsports = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/data/sports");
+        const res = await API.get("/api/data/sports");
         setSportsData(res.data);
       } catch (error) {
         console.log("error fetching sportsdata", error);
