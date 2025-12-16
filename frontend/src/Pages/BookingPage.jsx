@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/BookingPage.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import API from "../API";
 
 function BookingPage() {
   const [locationAllowed, setLocationAllowed] = useState(null);
@@ -54,8 +55,8 @@ useEffect(() => {
   if (locationAllowed && userLocation) {
     const fetchCourts = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/courts/carddetails");
-        const data = await res.json();
+        const res = await API.get("/api/courts/carddetails");
+        const data =  res.data
 
         const filtered= data.filter(court=>court.sportType===sport.name)
         .map((court) => ({
