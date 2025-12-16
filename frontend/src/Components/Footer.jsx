@@ -53,10 +53,10 @@ function Footer() {
         <div className="footer-links">
           <h3>Quick Links</h3>
           <ul>
-            <li><Link onClick={() => scrollToSection("home")}>Home</Link></li>
-            <li><Link onClick={() => scrollToSection("about")}>About</Link></li>
-            <li><Link onClick={() => scrollToSection("sports")}>Sports</Link></li>
-            <li><Link onClick={() => scrollToSection("contact")}>Contact</Link></li>
+            <li><Link onClick={() => scrollToSection("/")}>Home</Link></li>
+            <li><Link onClick={() => scrollToSection("/about")}>About</Link></li>
+            <li><Link onClick={() => scrollToSection("/sports")}>Sports</Link></li>
+            <li><Link onClick={() => scrollToSection("/contact")}>Contact</Link></li>
           </ul>
         </div>
 

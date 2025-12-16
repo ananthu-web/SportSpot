@@ -71,8 +71,7 @@
   transition: all 0.3s ease;
 }
 
-.footer-links h3:hover,
-.footer-contact h3:hover {
+.footer-links h3:hover {
   background: linear-gradient(45deg, #ffea00, #ffab00, #00ffff);
 }
 

@@ -34,12 +34,7 @@ function MainRouter() {
           }
         />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route
-          path="/edit-court/:courtId"
-          element={
-              <EditCourt />
-          }
-        />
+        <Route path="/edit-court/:courtId" element={ <EditCourt />}/>
       </Routes>
     </>
   );

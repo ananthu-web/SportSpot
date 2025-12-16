@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import styles from "../Styles/CourtDetails.module.css";
 import { FaUser, FaRulerCombined, FaBasketballBall, FaLightbulb, FaMoneyBillWave, FaStar } from "react-icons/fa";
+import { UserContext } from "../UserContext";
+import { useContext } from "react";
 
 function CourtDetails() {
   const location = useLocation();
+  const { user } =useContext(UserContext)
   const navigate=useNavigate()
   const { court, sport } = location.state || {};
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -14,11 +17,57 @@ function CourtDetails() {
   if (!slot.isBooked) setSelectedSlot(slot);
 };
 
+
+
 const handleConfirm = () => {
-    console.log("Confirmed slot:", selectedSlot);
-    navigate("/")
-    
+  if (!selectedSlot) return;
+
+  const isConfirmed = window.confirm(
+    `Do you want to book the slot at ${selectedSlot.time}?`
+  );
+
+  if (isConfirmed) {
+    // Only proceed to payment
+    openRazorpayPayment(selectedSlot);
+  } else {
+    console.log("User cancelled the booking");
+  }
+};
+
+// Razorpay payment
+const openRazorpayPayment = (slot) => {
+  if (!user) {
+    alert("User not loaded yet");
+    return;
+  }
+
+  const amount = 500; // replace with actual amount or court.bookingCharge
+  const options = {
+    key: import.meta.env.VITE_RAZORPAY_KEY_ID, // your Razorpay Key
+    amount: amount * 100, // Razorpay uses paise
+    currency: "INR",
+    name: "SportSpot",
+    description: `Booking slot ${slot.time}`,
+    handler: function (response) {
+      alert("Payment Successful!");
+      console.log("Razorpay Response:", response);
+      // Navigate after successful payment
+      navigate("/");
+    },
+    prefill: {
+      name: user.name,
+      email: user.email,
+      contact: user.phone || "",
+    },
+    theme: { color: "#f9a825" },
   };
+
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
+
+
+
 
   return (
     <div
@@ -44,22 +93,7 @@ const handleConfirm = () => {
         </div>
       </div>
 
-      {/* Slots */}
-      {/* {court.slots?.length > 0 && (
-        <div className={styles.courtSection}>
-          <h2>Available Slots</h2>
-          <div className={styles.horizontalScroll}>
-            {court.slots.map((slot, idx) => (
-              <div
-                key={idx}
-                className={`${styles.slotCard} ${slot.isBooked ? styles.booked : styles.available}`}
-              >
-                {slot.time}
-              </div>
-            ))}
-          </div>
-        </div>
-      )} */}
+
 
       {court.slots?.length > 0 && (
   <div className={styles.courtSection}>
