@@ -4,6 +4,14 @@ import Order from "../Models/Order.js";
 
 const router = express.Router();
 
+const normalizeSlot = (time) => {
+  return time
+    .replace(/\s+/g, "")
+    .replace("-", "to")
+    .toLowerCase();
+};
+
+
 router.get("/carddetails", async (req, res) => {
   try {
     const courts = await Court.find().populate("owner");
@@ -26,13 +34,24 @@ router.get("/carddetails", async (req, res) => {
           status: "paid",
         });
 
-        const bookedSlots = orders.flatMap(order => order.slots);
+        // const bookedSlots = orders.flatMap(order => order.slots);
+
+        // return {
+        //   ...court.toObject(),
+        //   slots: court.slots.map(slot => ({
+        //     time: slot,
+        //     isBooked: bookedSlots.includes(slot),
+        //   })),
+        // };
+        const bookedSlots = orders.flatMap((order) =>
+          (order.slots || []).map((s) => normalizeSlot(s))
+        );
 
         return {
           ...court.toObject(),
-          slots: court.slots.map(slot => ({
-            time: slot,
-            isBooked: bookedSlots.includes(slot),
+          slots: (court.slots || []).map((slot) => ({
+            time: typeof slot === "string" ? slot : slot.time || "",
+            isBooked: bookedSlots.includes(normalizeSlot(typeof slot === "string" ? slot : slot.time || "")),
           })),
         };
       })

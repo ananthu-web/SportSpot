@@ -79,8 +79,17 @@ function CourtDetails() {
           const bookingDate = new Date();
           bookingDate.setHours(0, 0, 0, 0);
 
+          // const startTimes = selectedSlots.map((slot) => {
+          //   const [startHourStr] = slot.time.time.split(" to ");
+          //   const startHour = Number(startHourStr);
+          //   const d = new Date(bookingDate);
+          //   d.setHours(startHour, 0, 0, 0);
+          //   return d;
+          // });
           const startTimes = selectedSlots.map((slot) => {
-            const [startHourStr] = slot.time.time.split(" to ");
+            const slotTime =
+              typeof slot.time === "string" ? slot.time : slot.time.time || "";
+            const [startHourStr] = slotTime.split(" to ");
             const startHour = Number(startHourStr);
             const d = new Date(bookingDate);
             d.setHours(startHour, 0, 0, 0);
@@ -96,7 +105,9 @@ function CourtDetails() {
             userId: user.id,
             courtId: court._id,
             date: bookingDate,
-            slots: selectedSlots.map(s => (typeof s.time === "string" ? s.time : s.time.time)),
+            slots: selectedSlots.map((s) =>
+              typeof s.time === "string" ? s.time : s.time.time
+            ),
             startTime,
             endTime,
             amount: amount,
