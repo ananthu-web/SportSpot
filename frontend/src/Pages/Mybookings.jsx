@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import "../Styles/MyBookings.css";
+import "../Styles/Mybookings.css";
 import { FaCheckCircle } from "react-icons/fa";
 import { UserContext } from "../UserContext";
 import API from "../API";
