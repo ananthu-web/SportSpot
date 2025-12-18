@@ -1,5 +1,4 @@
 
-
 import Court from "../Models/Court.js";
 import { CourtsData } from "../Datas/CourtData.js";
 

@@ -210,3 +210,16 @@
 .confirmBtn:hover {
   opacity: 0.9;
 }
+
+.selected {
+  background-color: #ff4d4f; /* red */
+  color: white;
+}
+.available {
+  background-color: #4caf50; /* green */
+  color: white;
+}
+.booked {
+  background-color: #ccc; /* grey */
+  color: #666;
+}

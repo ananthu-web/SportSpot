@@ -1,73 +1,147 @@
 import React, { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import styles from "../Styles/CourtDetails.module.css";
-import { FaUser, FaRulerCombined, FaBasketballBall, FaLightbulb, FaMoneyBillWave, FaStar } from "react-icons/fa";
+import {
+  FaUser,
+  FaRulerCombined,
+  FaBasketballBall,
+  FaLightbulb,
+  FaMoneyBillWave,
+  FaStar,
+} from "react-icons/fa";
 import { UserContext } from "../UserContext";
 import { useContext } from "react";
+import API from "../API";
 
 function CourtDetails() {
   const location = useLocation();
-  const { user } =useContext(UserContext)
-  const navigate=useNavigate()
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const { court, sport } = location.state || {};
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlots, setSelectedSlots] = useState([]);
+
   if (!court) return <p>No court selected!</p>;
 
+  // Toggle slot selection
   const handleSlotClick = (slot) => {
-  if (!slot.isBooked) setSelectedSlot(slot);
-};
+    if (slot.isBooked) return;
 
-
-
-const handleConfirm = () => {
-  if (!selectedSlot) return;
-
-  const isConfirmed = window.confirm(
-    `Do you want to book the slot at ${selectedSlot.time}?`
-  );
-
-  if (isConfirmed) {
-    // Only proceed to payment
-    openRazorpayPayment(selectedSlot);
-  } else {
-    console.log("User cancelled the booking");
-  }
-};
-
-// Razorpay payment
-const openRazorpayPayment = (slot) => {
-  if (!user) {
-    alert("User not loaded yet");
-    return;
-  }
-
-  const amount = 500; // replace with actual amount or court.bookingCharge
-  const options = {
-    key: import.meta.env.VITE_RAZORPAY_KEY_ID, // your Razorpay Key
-    amount: amount * 100, // Razorpay uses paise
-    currency: "INR",
-    name: "SportSpot",
-    description: `Booking slot ${slot.time}`,
-    handler: function (response) {
-      alert("Payment Successful!");
-      console.log("Razorpay Response:", response);
-      // Navigate after successful payment
-      navigate("/");
-    },
-    prefill: {
-      name: user.name,
-      email: user.email,
-      contact: user.phone || "",
-    },
-    theme: { color: "#f9a825" },
+    if (selectedSlots.some((s) => s.time === slot.time)) {
+      // deselect
+      setSelectedSlots(selectedSlots.filter((s) => s.time !== slot.time));
+    } else {
+      // select
+      setSelectedSlots([...selectedSlots, slot]);
+    }
   };
 
-  const rzp = new window.Razorpay(options);
-  rzp.open();
-};
+  const handleConfirm = () => {
+    if (selectedSlots.length === 0) return;
 
+    const isConfirmed = window.confirm(
+      `Do you want to book the slot(s) at ${selectedSlots
+        .map((s) => (typeof s.time === "string" ? s.time : s.time.time))
+        .join(", ")}?`
+    );
 
+    if (isConfirmed) {
+      openRazorpayPayment();
+    } else {
+      console.log("User cancelled the booking");
+    }
+  };
 
+  // Razorpay payment
+  const openRazorpayPayment = () => {
+    if (!user) {
+      alert("User not loaded yet");
+      return;
+    }
+
+    const amount = court.bookingCharge * selectedSlots.length;
+    const slotDuration = 1; // 1 hour per slot
+    const totalDuration = slotDuration * selectedSlots.length;
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: amount * 100,
+      currency: "INR",
+      name: "SportSpot",
+      description: `Booking slots ${selectedSlots
+        .map((s) => s.time)
+        .join(", ")}`,
+
+      handler: async function (response) {
+        try {
+          alert("Payment Successful!");
+
+          // Convert slot times to Date objects
+          const bookingDate = new Date();
+          bookingDate.setHours(0, 0, 0, 0);
+
+          const startTimes = selectedSlots.map((slot) => {
+            const [startHourStr] = slot.time.time.split(" to ");
+            const startHour = Number(startHourStr);
+            const d = new Date(bookingDate);
+            d.setHours(startHour, 0, 0, 0);
+            return d;
+          });
+
+          const startTime = new Date(Math.min(...startTimes));
+          const endTime = new Date(
+            startTime.getTime() + selectedSlots.length * 60 * 60 * 1000
+          );
+
+          const bookingData = {
+            userId: user.id,
+            courtId: court._id,
+            date: bookingDate,
+            slots: selectedSlots.map(s => (typeof s.time === "string" ? s.time : s.time.time)),
+            startTime,
+            endTime,
+            amount: amount,
+            paymentId: response.razorpay_payment_id,
+            status: "paid",
+            courtName: court.name,
+            location: court.location,
+            userName: user.name,
+            userEmail: user.email,
+            userPhone: user.phone || "",
+            paymentMethod: "Online",
+            instructions: "Arrive 10 mins early",
+            duration: selectedSlots.length,
+            maxPlayers: court.playerCount,
+          };
+
+          // POST to backend
+          const res = await API.post("/api/user/booking", bookingData, {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          });
+
+          // Navigate AFTER successful save
+          navigate("/orderpage", {
+            state: {
+              ...res.data.booking,
+            },
+          });
+        } catch (err) {
+          console.error(err);
+          alert("Booking failed. Please contact support.");
+        }
+      },
+      prefill: {
+        name: user.name,
+        email: user.email,
+        contact: user.phone || "",
+      },
+      theme: { color: "#f9a825" },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
 
   return (
     <div
@@ -84,46 +158,90 @@ const openRazorpayPayment = (slot) => {
       <div className={styles.courtSection}>
         <h2>Court Info</h2>
         <div className={styles.courtInfoGrid}>
-          <div className={styles.infoCard}><FaRulerCombined /> {court.size}</div>
-          <div className={styles.infoCard}><FaUser /> {court.playerCount} Players</div>
-          <div className={styles.infoCard}><FaBasketballBall /> {court.courtType}</div>
-          <div className={styles.infoCard}><FaMoneyBillWave /> ₹{court.bookingCharge}</div>
-          <div className={styles.infoCard}><FaLightbulb /> {court.lighting}</div>
-          {court.rating && <div className={styles.infoCard}><FaStar /> {court.rating}</div>}
+          <div className={styles.infoCard}>
+            <FaRulerCombined /> {court.size}
+          </div>
+          <div className={styles.infoCard}>
+            <FaUser /> {court.playerCount} Players
+          </div>
+          <div className={styles.infoCard}>
+            <FaBasketballBall /> {court.courtType}
+          </div>
+          <div className={styles.infoCard}>
+            <FaMoneyBillWave /> ₹{court.bookingCharge}
+          </div>
+          <div className={styles.infoCard}>
+            <FaLightbulb /> {court.lighting}
+          </div>
+          {court.rating && (
+            <div className={styles.infoCard}>
+              <FaStar /> {court.rating}
+            </div>
+          )}
         </div>
       </div>
-
-
 
       {court.slots?.length > 0 && (
-  <div className={styles.courtSection}>
-    <h2>Available Slots</h2>
+        <div className={styles.courtSection}>
+          <h2>Available Slots</h2>
 
-    <div className={styles.horizontalScroll}>
-      {court.slots.map((slot, idx) => (
-        <div
-          key={idx}
-          className={`${styles.slotCard} ${
-            slot.isBooked ? styles.booked : styles.available
-          }`}
-          onClick={() => !slot.isBooked && handleSlotClick(slot)}
-          style={{ cursor: slot.isBooked ? "not-allowed" : "pointer" }}
-        >
-          {slot.time}
+          <div className={styles.horizontalScroll}>
+            {court.slots.map((slot, idx) => {
+              // Determine display text
+              let displayTime = "";
+              if (typeof slot.time === "string") {
+                displayTime = slot.time;
+              } else if (slot.time && slot.time.time) {
+                displayTime = slot.time.time; // <-- use nested time
+              } else {
+                displayTime = "N/A";
+              }
+
+              // Determine booked status safely
+              const isBooked =
+                slot.isBooked || (slot.time && slot.time.isBooked);
+
+              return (
+                <div
+                  key={(slot.time && slot.time._id) || `slot-${idx}`}
+                  className={`${styles.slotCard} ${
+                    isBooked
+                      ? styles.booked
+                      : selectedSlots.some(
+                          (s) =>
+                            (typeof s.time === "string"
+                              ? s.time
+                              : s.time.time) === displayTime
+                        )
+                      ? styles.selected
+                      : styles.available
+                  }`}
+                  onClick={() => {
+                    if (!isBooked) handleSlotClick(slot);
+                  }}
+                  style={{ cursor: isBooked ? "not-allowed" : "pointer" }}
+                >
+                  {displayTime}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* ⭐ Confirm button appears here, below the scroll */}
+          {selectedSlots.length > 0 && (
+            <div className={styles.confirmWrapper}>
+              <button className={styles.confirmBtn} onClick={handleConfirm}>
+                Confirm{" "}
+                {selectedSlots
+                  .map((s) =>
+                    typeof s.time === "string" ? s.time : s.time.time
+                  )
+                  .join(", ")}
+              </button>
+            </div>
+          )}
         </div>
-      ))}
-    </div>
-
-    {/* ⭐ Confirm button appears here, below the scroll */}
-    {selectedSlot && (
-      <div className={styles.confirmWrapper}>
-        <button className={styles.confirmBtn} onClick={handleConfirm}>
-          Confirm {selectedSlot.time}
-        </button>
-      </div>
-    )}
-  </div>
-)}
+      )}
 
       {/* Amenities & Equipment */}
       <div className={styles.flexSection}>
@@ -132,7 +250,9 @@ const openRazorpayPayment = (slot) => {
             <h2>Amenities</h2>
             <div className={styles.tagGrid}>
               {court.amenities.map((item, idx) => (
-                <div key={idx} className={styles.tag}>{item}</div>
+                <div key={idx} className={styles.tag}>
+                  {item}
+                </div>
               ))}
             </div>
           </div>
@@ -142,7 +262,9 @@ const openRazorpayPayment = (slot) => {
             <h2>Equipment</h2>
             <div className={styles.tagGrid}>
               {court.equipmentAvailable.map((item, idx) => (
-                <div key={idx} className={styles.tag}>{item}</div>
+                <div key={idx} className={styles.tag}>
+                  {item}
+                </div>
               ))}
             </div>
           </div>
@@ -155,7 +277,12 @@ const openRazorpayPayment = (slot) => {
           <h2>Photos</h2>
           <div className={styles.horizontalScroll}>
             {court.photos.map((photo, idx) => (
-              <img key={idx} src={photo} alt={`court-${idx}`} className={styles.photoCard}/>
+              <img
+                key={idx}
+                src={photo}
+                alt={`court-${idx}`}
+                className={styles.photoCard}
+              />
             ))}
           </div>
         </div>
@@ -166,7 +293,9 @@ const openRazorpayPayment = (slot) => {
         {court.owner && (
           <div className={styles.courtSection}>
             <h2>Owner</h2>
-            <p><strong>{court.owner.name}</strong></p>
+            <p>
+              <strong>{court.owner.name}</strong>
+            </p>
             <p>{court.owner.phone}</p>
             <p>{court.owner.email}</p>
           </div>
@@ -176,7 +305,9 @@ const openRazorpayPayment = (slot) => {
             <h2>Reviews</h2>
             <div className={styles.reviewGrid}>
               {court.reviews.map((review, idx) => (
-                <div key={idx} className={styles.reviewCard}>"{review}"</div>
+                <div key={idx} className={styles.reviewCard}>
+                  "{review}"
+                </div>
               ))}
             </div>
           </div>

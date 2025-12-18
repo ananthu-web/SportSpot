@@ -10,6 +10,7 @@ function BookingPage() {
   const { sport } = location.state || {}
   const Navigate=useNavigate()
   const [userLocation, setUserLocation] = useState(null);
+  const selectedDate = new Date().toISOString().split("T")[0];
 
 
 
@@ -55,7 +56,7 @@ useEffect(() => {
   if (locationAllowed && userLocation) {
     const fetchCourts = async () => {
       try {
-        const res = await API.get("/api/courts/carddetails");
+        const res = await API.get(`/api/courts/carddetails?date=${selectedDate}`);
         const data =  res.data
 
         const filtered= data.filter(court=>court.sportType===sport.name)
@@ -78,7 +79,7 @@ useEffect(() => {
 
     fetchCourts();
   }
-}, [locationAllowed]);
+}, [locationAllowed, userLocation, sport, selectedDate]);
 
 
 

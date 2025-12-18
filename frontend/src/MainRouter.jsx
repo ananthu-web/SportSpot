@@ -12,6 +12,8 @@ import AddCourt from "./Pages/AddCourt.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 import EditCourt from "./Pages/EditCourt.jsx";
+import OrderPage from "./Pages/OrderPage.jsx";
+import MyBookings from "./Pages/Mybookings.jsx";
 
 function MainRouter() {
   return (
@@ -35,6 +37,8 @@ function MainRouter() {
         />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit-court/:courtId" element={ <EditCourt />}/>
+        <Route path="/orderpage" element={<OrderPage />} />
+        <Route path="/mybookings" element={<MyBookings/>}/>
       </Routes>
     </>
   );

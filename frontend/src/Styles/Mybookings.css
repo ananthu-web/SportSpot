@@ -1,0 +1,165 @@
+/* ===================== MY BOOKINGS PAGE ===================== */
+/* PAGE */
+.my-bookings-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #0a0a0a, #111);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+}
+
+/* MAIN CONTAINER */
+.my-bookings-container {
+  background: #222;
+  border: 1px solid #555;
+  width: 100%;
+  max-width: 1100px;
+  border-radius: 20px;
+  padding: 20px 50px; /* slightly increased padding */
+  padding-bottom: 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 35px; /* more space between title and cards */
+  box-shadow: 
+      0 2px 6px rgba(255, 215, 0, 0.15), /* subtle yellow shadow */
+      0 6px 18px rgba(0, 0, 0, 0.4),
+      inset 0 0 8px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+/* TITLE */
+.my-bookings-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 20px; /* slightly move text up */
+}
+
+.highlight {
+  color: #ffd700;
+}
+
+/* SCROLL CONTAINER */
+.bookings-scroll {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 15px 5px 20px;
+  scroll-behavior: smooth;
+}
+
+/* SCROLLBAR */
+.bookings-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.bookings-scroll::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+}
+
+/* BOOKING CARD */
+.booking-card {
+  flex: 0 0 290px;
+  min-height: 320px; /* increased height */
+  background: #111; 
+  border-radius: 20px;
+  padding: 20px 20px; /* increased padding for content spacing */
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* distribute content evenly */
+  box-shadow: 
+      0 2px 6px rgba(255, 215, 0, 0.15), 
+      0 6px 18px rgba(0, 0, 0, 0.4),
+      inset 0 0 8px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+/* CARD HOVER */
+.booking-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+      0 8px 18px rgba(255, 215, 0, 0.35), 
+      0 10px 28px rgba(0, 0, 0, 0.6),
+      inset 0 0 12px rgba(255, 255, 255, 0.08);
+}
+
+/* HEADER */
+.booking-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #1eee5d;
+  border-bottom: 1px dotted #ffd700;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* BODY */
+.booking-body {
+  text-align: center;
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px; /* proper spacing between lines */
+}
+
+.booking-body h4 {
+  color: #ffd700;
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.booking-body p {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin: 3px 0;
+}
+
+.price {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 12px;
+}
+
+/* VIEW BUTTON */
+.view-btn {
+  width: 100%;
+  background: #1a1a1a;
+  color: #ffd700;
+  border: 1.5px solid #ffd700;
+  padding: 8px 0;
+  border-radius: 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  margin-top: 10px; /* spacing from content */
+}
+
+.view-btn:hover {
+  background: #c8af21;
+  color: #130101;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .booking-card {
+    flex: 0 0 280px;
+    min-height: 380px;
+  }
+
+  .bookings-scroll {
+    gap: 18px;
+  }
+}

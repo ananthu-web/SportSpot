@@ -41,10 +41,6 @@ export const updateCourt = async (req, res) => {
     // Prevent changing ownership
     delete updateData.owner;
 
-    // If latitude/longitude are updated, regenerate the Google Maps URL
-    // if (updateData.latitude && updateData.longitude) {
-    //   updateData.map = `https://www.google.com/maps?q=${updateData.latitude},${updateData.longitude}&output=embed`;
-    // }
 
     // Update court in MongoDB
     const updatedCourt = await Court.findByIdAndUpdate(
@@ -64,5 +60,29 @@ export const updateCourt = async (req, res) => {
   } catch (err) {
     console.error("Error updating court:", err);
     res.status(500).json({ message: err.message || "Failed to update court" });
+  }
+};
+
+
+
+// Delete a court
+export const deleteCourt = async (req, res) => {
+  try {
+    const courtId = req.params.id;
+    const adminId = req.user._id;
+
+    // Make sure the court exists and belongs to this admin
+    const court = await Court.findOne({ _id: courtId, owner: adminId });
+    if (!court) {
+      return res.status(404).json({ message: "Court not found or not authorized" });
+    }
+
+    // Delete the court
+    await Court.findByIdAndDelete(courtId);
+
+    res.status(200).json({ message: "Court deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting court:", err);
+    res.status(500).json({ message: "Failed to delete court" });
   }
 };

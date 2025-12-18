@@ -121,6 +121,10 @@ function NavigationBar() {
                       Profile
                     </NavDropdown.Item>
 
+                    <NavDropdown.Item as={Link} to="/mybookings">
+                      My Bookings
+                    </NavDropdown.Item>
+
 
                     <NavDropdown.Divider />
                     <NavDropdown.Item as={Link} to="/help">

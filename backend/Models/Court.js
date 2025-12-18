@@ -23,11 +23,7 @@ const courtSchema = new mongoose.Schema({
   ],
   rating: { type: Number, default: 0 },
   reviews: [{ type: String }],
-  //  owner: {
-  //   name: { type: String },
-  //   phone: { type: String },
-  //  email: { type: String },
-  //  },
+
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   
   maxBookingHours: { type: Number, default: 2 },     // Max consecutive booking hours
