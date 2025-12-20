@@ -16,6 +16,8 @@ function OrderPage() {
     year: "numeric",
   });
 };
+console.log("helooo:",order);
+
   
 
   return (
@@ -33,7 +35,10 @@ function OrderPage() {
           <div className="court-info">
             <h2>{order.courtName}</h2>
             <p><FaMapMarkerAlt className="icon" /> {order.location}</p>
-            <p>Type: {order.courtType} • Max Players: {order.maxPlayers}</p>
+            <p>Type: {order.courtType}</p>
+            <p>Max Players: {order.maxPlayers}</p>
+
+
           </div>
           <div className="amount-info">
             <p><FaRupeeSign className="icon" /> Amount: ₹{order.amount}</p>

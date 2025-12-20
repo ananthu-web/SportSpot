@@ -136,7 +136,6 @@
   font-size: 0.95rem;
 }
 
-.booked { background: #f44336 !important; }
 
 .photoCard {
   width: 180px;
@@ -220,6 +219,47 @@
   color: white;
 }
 .booked {
-  background-color: #ccc; /* grey */
+ background: #f44336 !important; 
   color: #666;
+}
+
+
+/* ---------------- Stylish Date Picker Wrapper ---------------- */
+.datePickerWrapper {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* Date input styling */
+.datePickerWrapper input[type="date"] {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 900;
+  border: none;
+  /* background: linear-gradient(145deg, #f0f0f0, #d9d9d9); */
+  background: transparent;
+  /* box-shadow: 4px 4px 8px rgba(0,0,0,0.1), -4px -4px 8px rgba(255,255,255,0.7); */
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hover and focus effect */
+.datePickerWrapper input[type="date"]:hover,
+.datePickerWrapper input[type="date"]:focus {
+  outline: none;
+  background: linear-gradient(145deg, #ffffff, #e0e0e0);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+  transform: scale(1.03);
+}
+
+/* Calendar icon adjustment */
+.datePickerWrapper input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0.4); /* subtle modern color */
 }

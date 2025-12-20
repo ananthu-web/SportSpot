@@ -13,11 +13,14 @@ const bookingSchema = new mongoose.Schema(
       ref: "Court",
       required: true,
     },
+    courtType: { type: String, required: true },
 
     date: {
       type: Date,
       required: true,
     },
+      bookingDate: { type: Date, default: Date.now }, // ✅ When the booking was made
+
 
     slots: {
       type: [String], // ["10:00", "11:00"]

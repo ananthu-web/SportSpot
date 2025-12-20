@@ -12,6 +12,7 @@ import {
 import { UserContext } from "../UserContext";
 import { useContext } from "react";
 import API from "../API";
+import { useEffect } from "react";
 
 function CourtDetails() {
   const location = useLocation();
@@ -19,18 +20,34 @@ function CourtDetails() {
   const navigate = useNavigate();
   const { court, sport } = location.state || {};
   const [selectedSlots, setSelectedSlots] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [bookedSlots, setBookedSlots] = useState([]);
 
   if (!court) return <p>No court selected!</p>;
 
   // Toggle slot selection
-  const handleSlotClick = (slot) => {
-    if (slot.isBooked) return;
+  // const handleSlotClick = (slot) => {
+  //   if (slot.isBooked) return;
 
-    if (selectedSlots.some((s) => s.time === slot.time)) {
-      // deselect
-      setSelectedSlots(selectedSlots.filter((s) => s.time !== slot.time));
+  //   if (selectedSlots.some((s) => s.time === slot.time)) {
+  //     // deselect
+  //     setSelectedSlots(selectedSlots.filter((s) => s.time !== slot.time));
+  //   } else {
+  //     // select
+  //     setSelectedSlots([...selectedSlots, slot]);
+  //   }
+  // };
+  // Toggle slot selection
+  const handleSlotClick = (slot) => {
+    if (bookedSlots.includes(getSlotTime(slot))) return; // can’t select booked slots
+
+    if (selectedSlots.some((s) => getSlotTime(s) === getSlotTime(slot))) {
+      setSelectedSlots(
+        selectedSlots.filter((s) => getSlotTime(s) !== getSlotTime(slot))
+      );
     } else {
-      // select
       setSelectedSlots([...selectedSlots, slot]);
     }
   };
@@ -58,6 +75,37 @@ function CourtDetails() {
     return time.replace(/\s*to\s*/i, "-").trim();
   };
 
+  // ✅ Fetch booked slots for selected date
+  const fetchBookingsForDate = async (date) => {
+    try {
+      const res = await API.get(
+        `/api/user/availableslots?courtId=${court._id}&date=${date}`,
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      );
+      console.log("user token;", res.data);
+
+      const slotsBooked = res.data.bookedSlots || [];
+      setBookedSlots(slotsBooked);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // ✅ Handler for date change
+  const handleDateChange = (e) => {
+    const date = e.target.value;
+    setSelectedDate(date);
+    setSelectedSlots([]);
+    fetchBookingsForDate(date); // fetch bookings whenever date changes
+  };
+  useEffect(() => {
+    if (court && user) {
+      fetchBookingsForDate(selectedDate);
+    }
+  }, [court, user, selectedDate]);
+
   // Razorpay payment
   const openRazorpayPayment = () => {
     if (!user) {
@@ -83,7 +131,7 @@ function CourtDetails() {
           alert("Payment Successful!");
 
           // Convert slot times to Date objects
-          const bookingDate = new Date();
+          const bookingDate = new Date(selectedDate); // Use the date picked by the user
           bookingDate.setHours(0, 0, 0, 0);
 
           // const startTimes = selectedSlots.map((slot) => {
@@ -112,7 +160,9 @@ function CourtDetails() {
           const bookingData = {
             userId: user.id,
             courtId: court._id,
+            courtType: court.courtType,
             date: bookingDate,
+            bookingDate:new Date(),
             slots: selectedSlots.map((s) =>
               typeof s.time === "string" ? s.time : s.time.time
             ),
@@ -138,6 +188,7 @@ function CourtDetails() {
               Authorization: `Bearer ${user.token}`,
             },
           });
+          fetchBookingsForDate(selectedDate);
 
           // Navigate AFTER successful save
           navigate("/orderpage", {
@@ -160,6 +211,13 @@ function CourtDetails() {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
+  };
+
+  const getSlotTime = (slot) => {
+    if (!slot) return "";
+    const timeStr =
+      typeof slot.time === "string" ? slot.time : slot.time?.time || "";
+    return normalizeSlotTime(timeStr);
   };
 
   return (
@@ -204,17 +262,20 @@ function CourtDetails() {
         <div className={styles.courtSection}>
           <h2>Available Slots</h2>
 
+          {/* ✅ Date Picker */}
+          <div className={styles.datePickerWrapper}>
+            <label htmlFor="bookingDate">Pick a Date: </label>
+            <input
+              type="date"
+              id="bookingDate"
+              value={selectedDate}
+              min={new Date().toISOString().split("T")[0]}
+              onChange={handleDateChange} // ✅ Updated
+            />
+          </div>
+
           <div className={styles.horizontalScroll}>
             {court.slots.map((slot, idx) => {
-              // Determine display text
-              // let displayTime = "";
-              // if (typeof slot.time === "string") {
-              //   displayTime = slot.time;
-              // } else if (slot.time && slot.time.time) {
-              //   displayTime = slot.time.time; // <-- use nested time
-              // } else {
-              //   displayTime = "N/A";
-              // }
               let displayTime = "";
               if (typeof slot.time === "string") {
                 displayTime = normalizeSlotTime(slot.time);
@@ -225,20 +286,33 @@ function CourtDetails() {
               }
 
               // Determine booked status safely
-              const isBooked =
-                slot.isBooked || (slot.time && slot.time.isBooked);
+              const normalizedBookedSlots = bookedSlots.map((s) =>
+                normalizeSlotTime(s)
+              );
+
+              const isBooked = normalizedBookedSlots.includes(displayTime);
 
               return (
                 <div
-                  key={(slot.time && slot.time._id) || `slot-${idx}`}
+                  // key={(slot.time && slot.time._id) || `slot-${idx}`}
+                  // className={`${styles.slotCard} ${
+                  //   isBooked
+                  //     ? styles.booked
+                  //     : selectedSlots.some(
+                  //         (s) =>
+                  //           (typeof s.time === "string"
+                  //             ? s.time
+                  //             : s.time.time) === displayTime
+                  //       )
+                  //     ? styles.selected
+                  //     : styles.available
+                  // }`}
+                  key={slot._id || idx}
                   className={`${styles.slotCard} ${
                     isBooked
                       ? styles.booked
                       : selectedSlots.some(
-                          (s) =>
-                            (typeof s.time === "string"
-                              ? s.time
-                              : s.time.time) === displayTime
+                          (s) => getSlotTime(s) === displayTime
                         )
                       ? styles.selected
                       : styles.available
