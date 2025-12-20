@@ -51,6 +51,13 @@ function CourtDetails() {
     }
   };
 
+  // Add this inside CourtDetails.jsx, before openRazorpayPayment
+  const normalizeSlotTime = (time) => {
+    if (!time) return "";
+    // Replace "to" with "-" but keep everything else (including AM/PM)
+    return time.replace(/\s*to\s*/i, "-").trim();
+  };
+
   // Razorpay payment
   const openRazorpayPayment = () => {
     if (!user) {
@@ -89,11 +96,12 @@ function CourtDetails() {
           const startTimes = selectedSlots.map((slot) => {
             const slotTime =
               typeof slot.time === "string" ? slot.time : slot.time.time || "";
-            const [startHourStr] = slotTime.split(" to ");
-            const startHour = Number(startHourStr);
-            const d = new Date(bookingDate);
-            d.setHours(startHour, 0, 0, 0);
-            return d;
+            const normalized = normalizeSlotTime(slotTime);
+            const [startStr] = normalized.split("-");
+            if (!startStr) return new Date();
+
+            // Parse using AM/PM
+            return new Date(`${bookingDate.toDateString()} ${startStr}`);
           });
 
           const startTime = new Date(Math.min(...startTimes));
@@ -199,11 +207,19 @@ function CourtDetails() {
           <div className={styles.horizontalScroll}>
             {court.slots.map((slot, idx) => {
               // Determine display text
+              // let displayTime = "";
+              // if (typeof slot.time === "string") {
+              //   displayTime = slot.time;
+              // } else if (slot.time && slot.time.time) {
+              //   displayTime = slot.time.time; // <-- use nested time
+              // } else {
+              //   displayTime = "N/A";
+              // }
               let displayTime = "";
               if (typeof slot.time === "string") {
-                displayTime = slot.time;
+                displayTime = normalizeSlotTime(slot.time);
               } else if (slot.time && slot.time.time) {
-                displayTime = slot.time.time; // <-- use nested time
+                displayTime = normalizeSlotTime(slot.time.time);
               } else {
                 displayTime = "N/A";
               }

@@ -8,6 +8,14 @@ function OrderPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const order = location.state
+
+  const formatDate = (date) => {
+  return new Date(date).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
   
 
   return (
@@ -32,7 +40,7 @@ function OrderPage() {
             <p>Payment: {order.paymentMethod}</p>
             <p>Booking ID: {order._id}</p>
             <p>Slot: {order.slots.join(", ")}</p>
-            <p>Date: {order.date}</p>
+            <p>Date: {formatDate(order.date)}</p>
           </div>
         </div>
 

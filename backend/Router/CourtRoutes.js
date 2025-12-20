@@ -5,10 +5,29 @@ import Order from "../Models/Order.js";
 const router = express.Router();
 
 const normalizeSlot = (time) => {
-  return time
-    .replace(/\s+/g, "")
-    .replace("-", "to")
-    .toLowerCase();
+  if (!time || typeof time !== "string") return "";
+
+  // Remove extra spaces
+  let t = time.trim();
+
+  // Replace "to" or "-" with "-"
+  t = t.replace(/\s*(to|-)\s*/i, "-");
+
+  // Split start and end
+  let [start, end] = t.split("-");
+  if (!start || !end) return t.toLowerCase();
+
+  // Ensure hours have leading zero and add ":00" if missing
+  const formatHour = (h) => {
+    h = h.trim();
+    if (h.includes(":")) return h.padStart(5, "0"); // already HH:MM
+    return h.padStart(2, "0") + ":00"; // add minutes
+  };
+
+  start = formatHour(start);
+  end = formatHour(end);
+
+  return `${start}-${end}`.toLowerCase();
 };
 
 
