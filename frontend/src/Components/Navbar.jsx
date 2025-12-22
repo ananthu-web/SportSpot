@@ -127,9 +127,9 @@ function NavigationBar() {
 
 
                     <NavDropdown.Divider />
-                    <NavDropdown.Item as={Link} to="/help">
+                    {/* <NavDropdown.Item as={Link} to="/help">
                       Help & Support
-                    </NavDropdown.Item>
+                    </NavDropdown.Item> */}
                   </NavDropdown>
                 )}
               </>

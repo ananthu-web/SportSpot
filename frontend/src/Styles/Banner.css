@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   perspective: 1200px; /* for 3D depth */
+  background-color: rgb(185, 183, 183);
 }
 
 .flip-background {

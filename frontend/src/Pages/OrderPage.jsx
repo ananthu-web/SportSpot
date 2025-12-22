@@ -9,6 +9,7 @@ function OrderPage() {
   const location = useLocation();
   const order = location.state
 
+
   const formatDate = (date) => {
   return new Date(date).toLocaleDateString("en-IN", {
     day: "2-digit",

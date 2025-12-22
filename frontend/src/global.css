@@ -1,0 +1,9 @@
+/* global.css */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  background-color: #121212; /* dark background */
+  color: #fff;
+  min-height: 100%;
+  font-family: 'Poppins', sans-serif;
+}
