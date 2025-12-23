@@ -24,19 +24,19 @@ const BannerData = [
   },
   {
     name: "Cricket",
-    image: "http://localhost:3000/images/4651155.jpg"
+    image: "https://sportspot-u1t8.onrender.com/images/4651155.jpg"
   },
   {
     name: "Badminton",
-    image: "http://localhost:3000/images/badminton-concept-with-shuttlecock-racket.jpg"
+    image: "https://sportspot-u1t8.onrender.com/images/badminton-concept-with-shuttlecock-racket.jpg"
   },
   {
     name: "Tennis",
-    image: "http://localhost:3000/images/j-schiemann-Z4Sxy1_3wdY-unsplash.jpg"
+    image: "https://sportspot-u1t8.onrender.com/images/j-schiemann-Z4Sxy1_3wdY-unsplash.jpg"
   },
   {
     name: "volleyball",
-    image: "http://localhost:3000/images/jannes-glas-0NaQQsLWLkA-unsplash.jpg"
+    image: "https://sportspot-u1t8.onrender.com/images/jannes-glas-0NaQQsLWLkA-unsplash.jpg"
   },
 ];
 
