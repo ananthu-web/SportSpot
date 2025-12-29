@@ -20,7 +20,7 @@ const BannerData = [
 
   {
     name: "Boxing",
-    image: "http://localhost:3000/images/2503324.jpg"
+    image: "https://sportspot-u1t8.onrender.com/images/2503324.jpg"
   },
   {
     name: "Cricket",
