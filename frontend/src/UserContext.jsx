@@ -8,9 +8,6 @@ export function UserProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  console.log("context user", user);
-
-  
 
   // Load user from localStorage on page refresh
   useEffect(() => {

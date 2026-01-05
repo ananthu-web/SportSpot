@@ -27,19 +27,6 @@ function CourtDetails() {
 
   if (!court) return <p>No court selected!</p>;
 
-  // Toggle slot selection
-  // const handleSlotClick = (slot) => {
-  //   if (slot.isBooked) return;
-
-  //   if (selectedSlots.some((s) => s.time === slot.time)) {
-  //     // deselect
-  //     setSelectedSlots(selectedSlots.filter((s) => s.time !== slot.time));
-  //   } else {
-  //     // select
-  //     setSelectedSlots([...selectedSlots, slot]);
-  //   }
-  // };
-  // Toggle slot selection
   const handleSlotClick = (slot) => {
     if (bookedSlots.includes(getSlotTime(slot))) return; // can’t select booked slots
 
