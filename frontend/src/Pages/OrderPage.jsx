@@ -17,10 +17,6 @@ function OrderPage() {
     year: "numeric",
   });
 };
-console.log("helooo:",order);
-
-  
-
   return (
     <div className="page">
       <div className="ticket">

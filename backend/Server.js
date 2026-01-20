@@ -17,8 +17,8 @@ Dotenv.config()
 const app=express()
 
 app.use(cors({
-  origin: "https://sportspot-1.onrender.com", // your deployed frontend URL
-  credentials: true, // if you need cookies or auth headers
+  origin: "https://sportspot-1.onrender.com",
+  credentials: true,
 }));
 app.use(express.json())
 app.use("/images", express.static("Public/Images"));

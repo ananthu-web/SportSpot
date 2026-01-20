@@ -212,3 +212,8 @@
     text-align: center;
   }
 }
+
+/* Make Bootstrap hamburger icon white */
+.custom-navbar .navbar-toggler-icon {
+  filter: invert(1);
+}

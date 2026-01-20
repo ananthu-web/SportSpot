@@ -71,7 +71,6 @@ function CourtDetails() {
           headers: { Authorization: `Bearer ${user.token}` },
         }
       );
-      console.log("user token;", res.data);
 
       const slotsBooked = res.data.bookedSlots || [];
       setBookedSlots(slotsBooked);
