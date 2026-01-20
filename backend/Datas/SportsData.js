@@ -6,12 +6,12 @@ const SportsData = [
   },
   {
     name: "Badminton",
-    image: "https://i.pinimg.com/1200x/f7/48/62/f74862f27ad8d74751f059e22a63f61a.jpg",
+    image: "https://images.pexels.com/photos/12630113/pexels-photo-12630113.jpeg",
     description: "Find badminton courts nearby and schedule your games instantly.",
   },
   {
     name: "Tennis",
-    image: "https://i.pinimg.com/1200x/d4/86/d6/d486d6de7ed6d10b9f5c32173cad50bc.jpg",
+    image: "https://images.pexels.com/photos/8224683/pexels-photo-8224683.jpeg",
     description: "Book tennis courts for singles or doubles matches with ease. ",
   },
   {
